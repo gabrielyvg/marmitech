@@ -1,0 +1,24 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    background-color: #F89A9A;
+    color: #fff;
+    height: 50px;
+    z-index: 20;
+}
+
+.menu {
+    display: inline-flex;
+    width: 100%;
+}
+
+.menuItem {
+    color: #fff;
+    text-decoration: none;
+    margin: 20px;
+}
+
+.userImg {
+    border-radius: 50px;
+    margin: 10px;
+}

@@ -1,0 +1,39 @@
+.container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    top: 100px;
+}
+
+.container div {
+    display: flex;
+    flex-direction: column;
+}
+
+.box {
+    width: 20rem;
+    height: 20rem;
+    justify-content: center;
+    align-items: center;
+    background-color: #dfdfdf;
+    border-radius: 50px;
+    padding-bottom: 30px;
+}
+
+/* .containerElements {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+} */
+
+.subtitulo {
+    align-self: self-end;
+}
+
+@media (max-width: 600px) {
+    .box {
+        width: 100%;
+        margin: 10px;
+    }
+}
