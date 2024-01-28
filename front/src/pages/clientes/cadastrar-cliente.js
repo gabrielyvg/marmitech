@@ -40,7 +40,7 @@ export default function CadastrarCliente() {
             })
             .catch((err) => {
                 console.log(err);
-                alert('Erro ao salvar');
+                /* alert('Erro ao salvar'); */
             })
     };
 
@@ -49,7 +49,7 @@ export default function CadastrarCliente() {
     }
 
     return (
-        <section className="bg-neutral-100">
+        <section>
             <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                 <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Cadastrar cliente</h2>
                 <form onSubmit={onSubmit} className='items-center'>

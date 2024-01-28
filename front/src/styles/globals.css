@@ -5,6 +5,7 @@
 html,
 body {
   height: 100%;
+  width: 100%;
 }
 
 body {
@@ -12,20 +13,16 @@ body {
 }
 
 th {
-  color: #28224B;
-  font-size: 12px;
+  font-size: 14px;
   font-family: Roboto;
   font-weight: 700;
-  line-height: 18px;
   word-wrap: break-word;
   font-family: sans-serif
 }
 
 td {
-  color: #666666;
   font-size: 14px;
   font-weight: 400;
-  line-height: 20px;
   letter-spacing: 0.04px;
   word-wrap: break-word;
 }
@@ -35,20 +32,9 @@ tr {
 }
 
 table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 50%;
   border-radius: 4px;
   margin: auto;
   transition: .7s
-}
-
-td,
-th {
-  border-top: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-
 }
 
 h1 {

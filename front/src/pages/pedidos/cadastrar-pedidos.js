@@ -46,7 +46,7 @@ export default function CadastrarPedidos() {
     return (
         <section className="bg-neutral-100">
             <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
-                <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Registrar pedidos</h2>
+                <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Registrar pedido</h2>
                 <form onSubmit={onSubmit}>
                     <div className='grid grid-cols-2'>
                         <div className='mr-4'>
