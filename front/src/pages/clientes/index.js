@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { clienteService } from '../../services/clienteService';
 import { useRouter } from 'next/router';
+import mock from '@/utils/mock';
 
 export default function Clientes() {
     const router = useRouter();
@@ -26,33 +27,36 @@ export default function Clientes() {
 
     return (
         <>
-            <div className='align-right'>
-                <h1>Lista de clientes</h1>
-                <button className='btn' onClick={addCliente}>Adicionar Cliente</button>
-            </div>
-            {
-                carregando ? (
-                    <p>Carregando dados...</p>
-                ) : (
-                    <table>
+            <section className="bg-neutral-100">
+                <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
+                    <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Listagem de clientes</h2>
+                    <table className='table-auto border-separate sm:border-spacing-1 md:border-spacing-4 lg:border-spacing-6'>
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Nome</th>
-                                <th>Telefone</th>
+                                {mock.tableCliente.map
+                                    ((column) => (
+                                        <th key={column.id} >{column.nome}</th>
+                                    ))
+                                }
                             </tr>
                         </thead>
                         <tbody>
-                            {clientes.map((cliente) => (
-                                <tr key={cliente.id}>
-                                    <td>{cliente.id}</td>
-                                    <td>{cliente.nome}</td>
-                                    <td>{cliente.telefone}</td>
-                                </tr>
-                            ))}
+                            {clientes.map
+                                ((row) => (
+                                    <tr key={row.id}>
+                                        <td>{row.nome}</td>
+                                        <td>{row.telefone}</td>
+                                        <td>{row.bairro}</td>
+                                        <td>{row.cidade}</td>
+                                        <td>{row.endereco}</td>
+                                        <td>{row.paga_mensalmente}</td>
+                                    </tr>
+                                ))
+                            }
                         </tbody>
                     </table>
-                )}
+                </div>
+            </section>
         </>
     )
 }

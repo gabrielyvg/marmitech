@@ -1,6 +1,6 @@
 export const clienteService = {
     async listar() {
-        const response = await fetch('http://localhost:3000/cliente/listar', {
+        const response = await fetch('http://localhost:3001/cliente/listar', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -13,7 +13,7 @@ export const clienteService = {
     },
 
     async salvar({ dados }) {
-        const response = await fetch('http://localhost:3000/cliente/salvar', {
+        const response = await fetch('http://localhost:3001/cliente/salvar', {
             method: 'POST',
             body: { dados },
             headers: {

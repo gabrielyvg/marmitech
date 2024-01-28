@@ -25,4 +25,33 @@ const marmitasTamanho = [
         tamanho: 'G'
     }
 ]
-export default { menuOptions, marmitasTamanho };
+
+const tableCliente = [
+    {
+        id: 1,
+        nome: 'Nome',
+    },
+    {
+        id: 2,
+        nome: 'Telefone',
+    },
+    {
+        id: 3,
+        nome: 'Bairro',
+    },
+    {
+        id: 4,
+        nome: 'Cidade',
+    },
+    {
+        id: 5,
+        nome: 'Endereço',
+    },
+    {
+        id: 6,
+        nome: 'Paga Mensalmente'
+    }
+]
+
+
+export default { menuOptions, marmitasTamanho, tableCliente };
