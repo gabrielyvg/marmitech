@@ -52,25 +52,28 @@ export default function Login() {
         <title>Marmitech</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div className={styles.container}>
-        <div className={styles.box}>
-          <div>
-            <h1>{titulo}</h1>
-            <span className={styles.subtitulo}>{subtitulo}</span>
-          </div>
-          <div className='containerElements'>
-            <form onSubmit={onSubmit}>
-              <input onChange={handleChange} type="text"
-                name="username" values={values.username}
-                placeholder="Usuário" />
-              <input onChange={handleChange} type="password"
-                name="password" value={values.password}
-                placeholder="Senha" />
-              <button type="submit">Entrar</button>
-            </form>
+      <main>
+        <div className={styles.container}>
+          <div className={styles.box}>
+            <div>
+              <h1>{titulo}</h1>
+              <span className={styles.subtitulo}>{subtitulo}</span>
+            </div>
+            <div className='containerElements'>
+              <form onSubmit={onSubmit}>
+                <input onChange={handleChange} type="text"
+                  name="username" values={values.username}
+                  placeholder="Usuário" />
+                <input onChange={handleChange} type="password"
+                  name="password" value={values.password}
+                  placeholder="Senha" />
+                <button type="submit">Entrar</button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      </main>
+
     </>
   );
 }
