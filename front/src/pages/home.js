@@ -1,8 +1,9 @@
 import Header from '../components/Header.js';
+import Table from '../components/Table.js';
+
 export default function Home() {
     return (
-        <Header>
-            <h1>hi</h1>
-        </Header>
+        <>
+        </>
     )
 }
