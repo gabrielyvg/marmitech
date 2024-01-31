@@ -14,6 +14,11 @@ const menuOptions = [
         title: "Pedidos",
         url: '/pedidos'
     },
+    {
+        id: "financeiro",
+        title: "Financeiro",
+        url: '/financeiro'
+    },
 ]
 
 const marmitasTamanho = [
@@ -58,5 +63,20 @@ const tableCliente = [
     }
 ]
 
+const tableGastos = [
+    {
+        id: 1,
+        nome: 'Fatura',
+    },
+    {
+        id: 2,
+        nome: 'R$',
+    },
+    {
+        id: 3,
+        nome: 'Dia',
+    }
+]
 
-export default { menuOptions, marmitasTamanho, tableCliente };
+
+export default { menuOptions, marmitasTamanho, tableCliente, tableGastos };
