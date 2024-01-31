@@ -2,6 +2,9 @@ import mockObj from '@/utils/mock';
 import { useRouter } from 'next/router';
 import { useState } from "react";
 import { pedidoService } from '../../services/pedidoService';
+import DatePicker from 'react-date-picker';
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-calendar/dist/Calendar.css';
 
 export default function CadastrarPedidos() {
     const router = useRouter();
@@ -28,15 +31,15 @@ export default function CadastrarPedidos() {
         const data = new FormData();
         Object.entries(dadosFormulario).forEach(([key, value]) => {
             data.append(key, value);
-        }) 
+        })
         pedidoService
-             .salvar({
-                 data: data,
-             })
-             .catch((err) => {
-                 console.log(err);
-                 alert('Erro ao salvar');
-             })
+            .salvar({
+                data: data,
+            })
+            .catch((err) => {
+                console.log(err);
+                /* alert('Erro ao salvar'); */
+            })
     };
 
     const voltar = () => {
@@ -70,6 +73,9 @@ export default function CadastrarPedidos() {
                                     <option key={mtTamanho.id}>{mtTamanho.tamanho}</option>
                                 ))}
                             </select>
+                        </div>
+                        <div className='mt-4'>
+                            <DatePicker />
                         </div>
                         <div className='mt-4'>
                             <input type="checkbox" id="pago" name="pago" className='mr-1' checked={dadosFormulario.pago} onChange={handleInput} />

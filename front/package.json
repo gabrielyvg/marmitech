@@ -16,7 +16,9 @@
     "next": "latest",
     "nookies": "^2.5.2",
     "react": "latest",
+    "react-date-picker": "^10.6.0",
     "react-dom": "latest",
+    "react-google-charts": "^4.0.1",
     "swr": "^2.2.4"
   },
   "devDependencies": {

@@ -17,7 +17,7 @@ export default function CadastrarCliente() {
 
     const handleInput = (e) => {
         const fieldName = e.target.name;
-        const fieldValue = e.target.value;
+        const fieldValue = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
 
         setDadosFormulario((prevState) => ({
             ...prevState,
@@ -27,20 +27,13 @@ export default function CadastrarCliente() {
 
     const onSubmit = async (event) => {
         event.preventDefault();
-        const formURL = event.target.action;
-        const data = new FormData();
-
-        Object.entries(dadosFormulario).forEach(([key, value]) => {
-            data.append(key, value);
-        })
 
         clienteService
             .salvar({
-                data: data,
+                data: dadosFormulario,
             })
             .catch((err) => {
                 console.log(err);
-                /* alert('Erro ao salvar'); */
             })
     };
 
@@ -107,6 +100,10 @@ export default function CadastrarCliente() {
                                 value={dadosFormulario.cidade}
                                 onChange={handleInput}
                                 className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5' />
+                        </div>
+                        <div className='mt-4'>
+                            <input type="checkbox" id="paga_mensalmente" name="paga_mensalmente" className='mr-1' checked={dadosFormulario.paga_mensalmente} onChange={handleInput} />
+                            <label htmlFor="paga_mensalmente" className="text-sm font-medium text-gray-900" >Paga mensalmente</label>
                         </div>
                     </div>
                     <div className='flex justify-center mt-5'>

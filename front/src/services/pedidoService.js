@@ -15,7 +15,7 @@ export const pedidoService = {
     async salvar({ dados }) {
         const response = await fetch('http://localhost:3000/pedido/salvar', {
             method: 'POST',
-            body: { dados },
+            body: dados,
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
