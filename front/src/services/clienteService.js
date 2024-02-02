@@ -16,7 +16,7 @@ export const clienteService = {
         console.log('sdafasdf',dados);
         const response = await fetch('http://localhost:3001/cliente/salvar', {
             method: 'POST',
-            body:  dados,
+            body:  JSON.stringify(dados),
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
