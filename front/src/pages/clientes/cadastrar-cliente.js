@@ -1,13 +1,15 @@
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { useState } from "react";
 import { clienteService } from '../../services/clienteService';
+import mockObj from '@/utils/mock';
 
 export default function CadastrarCliente() {
     const router = useRouter();
-    const { register, handleSubmit} = useForm();
-    
+    const { register, handleSubmit, setValue } = useForm({ defaultValues: {} });
+
     function handleSubmitForm(data) {
+        data.paga_mensalmente = data.paga_mensalmente ? 1 : 0;
+
         clienteService
             .salvar({
                 data: JSON.stringify(data),
@@ -75,8 +77,21 @@ export default function CadastrarCliente() {
                                 {...register('cidade')}
                                 className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5' />
                         </div>
-                        <div className='mt-4'>
-                            <input type="checkbox" id="paga_mensalmente" name="paga_mensalmente" className='mr-1' {...register('paga_mensalmente')} />
+                        <div className='mr-4'>
+                            <label htmlFor="empresa" className="block mb-2 text-sm font-medium text-gray-900">Empresa</label>
+                            <select id='idEmpresa' {...register('idEmpresa')}
+                                className='shadow-sm bg-gray-50 border
+                                    border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5'
+                            >
+                                {mockObj.empresas.map((empresa) => (
+                                    <option value={empresa.id} key={empresa.id}>{empresa.nome}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className='ml-4 mt-4'>
+
+                            <input type="checkbox" id="paga_mensalmente" name="paga_mensalmente" className='mr-1' {...register('paga_mensalmente')}
+                                onChange={(e) => setValue('paga_mensalmente', e.target.checked)} />
                             <label htmlFor="paga_mensalmente" className="text-sm font-medium text-gray-900" >Paga mensalmente</label>
                         </div>
                     </div>

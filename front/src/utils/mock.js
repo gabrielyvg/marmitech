@@ -78,5 +78,19 @@ const tableGastos = [
     }
 ]
 
+const empresas = [
+    {
+        id: 1,
+        nome: 'Empresa Ficticia'
+    },
+    {
+        id: 2,
+        nome: 'Empresa Teste'
+    },
+    {
+        id: 3,
+        nome: 'Empresa mais uma'
+    }
+]
 
-export default { menuOptions, marmitasTamanho, tableCliente, tableGastos };
+export default { menuOptions, marmitasTamanho, tableCliente, tableGastos, empresas };
