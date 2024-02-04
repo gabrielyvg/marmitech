@@ -38,7 +38,7 @@ export default function CadastrarCliente() {
                                 className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5' />
                         </div>
                         <div className='ml-4'>
-                            <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-900">Telefone</label>
+                            <label htmlFor="telefone" className="block mb-2 text-sm font-medium text-gray-900">Telefone</label>
                             <input type="phone"
                                 name="telefone"
                                 placeholder="Telefone"
@@ -46,7 +46,7 @@ export default function CadastrarCliente() {
                                 className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5' />
                         </div>
                         <div className='mr-4'>
-                            <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-900">Endereço</label>
+                            <label htmlFor="endereco" className="block mb-2 text-sm font-medium text-gray-900">Endereço</label>
                             <input type="text"
                                 name="endereco"
                                 placeholder="Endereço"
@@ -54,7 +54,7 @@ export default function CadastrarCliente() {
                                 className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5' />
                         </div>
                         <div className='ml-4'>
-                            <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-900">Número</label>
+                            <label htmlFor="numero" className="block mb-2 text-sm font-medium text-gray-900">Número</label>
                             <input type="text"
                                 name="numero"
                                 placeholder="Número"
@@ -62,7 +62,7 @@ export default function CadastrarCliente() {
                                 className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5' />
                         </div>
                         <div className='mr-4'>
-                            <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-900">Bairro</label>
+                            <label htmlFor="bairro" className="block mb-2 text-sm font-medium text-gray-900">Bairro</label>
                             <input type="text"
                                 name="bairro"
                                 placeholder="Bairro"
@@ -70,7 +70,7 @@ export default function CadastrarCliente() {
                                 className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5' />
                         </div>
                         <div className='ml-4'>
-                            <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-900">Cidade</label>
+                            <label htmlFor="cidade" className="block mb-2 text-sm font-medium text-gray-900">Cidade</label>
                             <input type="text"
                                 name="cidade"
                                 placeholder="Cidade"
@@ -78,16 +78,14 @@ export default function CadastrarCliente() {
                                 className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5' />
                         </div>
                         <div className='mr-4'>
-                            <label htmlFor="empresa" className="block mb-2 text-sm font-medium text-gray-900">Empresa</label>
-                            <select id='idEmpresa' {...register('idEmpresa')}
-                                className='shadow-sm bg-gray-50 border
-                                    border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5'
-                            >
-                                {mockObj.empresas.map((empresa) => (
-                                    <option value={empresa.id} key={empresa.id}>{empresa.nome}</option>
-                                ))}
-                            </select>
+                            <label htmlFor="quantidade" className="block mb-2 text-sm font-medium text-gray-900">Quantidade</label>
+                            <input type="text"
+                                name="quantidade"
+                                placeholder="Quantidade"
+                                {...register('quantidade')}
+                                className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5' />
                         </div>
+                      
                         <div className='ml-4 mt-4'>
 
                             <input type="checkbox" id="paga_mensalmente" name="paga_mensalmente" className='mr-1' {...register('paga_mensalmente')}
