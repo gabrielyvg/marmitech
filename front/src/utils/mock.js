@@ -3,11 +3,16 @@ const menuOptions = [
         id: "home",
         title: "Inicio",
         url: '/home'
-    },    
+    },
     {
         id: "clientes",
         title: "Clientes",
-        url: '/clientes'
+        url: '/clientes',
+        subitem: {
+            id: "cadastrar-cliente",
+            title: "Cadastrar cliente",
+            url: '/clientes/cadastrar-cliente',
+        }
     },
     {
         id: "pedidos",
@@ -59,6 +64,10 @@ const tableCliente = [
     },
     {
         id: 6,
+        nome: 'Quantidade',
+    },
+    {
+        id: 7,
         nome: 'Paga Mensalmente'
     }
 ]
