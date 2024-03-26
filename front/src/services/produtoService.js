@@ -1,6 +1,6 @@
 export const produtoService = {
   async listar() {
-      const response = await fetch('http://localhost:3000/produto/listar', {
+      const response = await fetch(BACKEND_URL + '/produto/listar', {
           method: 'GET',
           headers: {
               'Content-Type': 'application/json',
@@ -13,7 +13,7 @@ export const produtoService = {
   },
 
   async salvar({ dados }) {
-      const response = await fetch('http://localhost:3000/produto/salvar', {
+      const response = await fetch(BACKEND_URL + '/produto/salvar', {
           method: 'POST',
           body: dados,
           headers: {
