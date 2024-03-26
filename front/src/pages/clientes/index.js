@@ -50,6 +50,7 @@ export default function Clientes() {
                                         <td>{row.bairro}</td>
                                         <td>{row.cidade}</td>
                                         <td>{row.endereco}</td>
+                                        <td></td>
                                         <td>{row.paga_mensalmente === 1 ? 'SIM' : 'NÃO'}</td>
                                     </tr>
                                 ))
