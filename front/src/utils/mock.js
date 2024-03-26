@@ -20,6 +20,11 @@ const menuOptions = [
         url: '/pedidos'
     },
     {
+        id: "produtos",
+        title: "Produtos",
+        url: '/produtos'
+    },
+    {
         id: "financeiro",
         title: "Financeiro",
         url: '/financeiro'
@@ -102,4 +107,19 @@ const empresas = [
     }
 ]
 
-export default { menuOptions, marmitasTamanho, tableCliente, tableGastos, empresas };
+const tiposProdutos = [
+    {
+        id: 1,
+        nome: 'Marmita'
+    },
+    {
+        id: 2,
+        nome: 'Bebida'
+    },
+    {
+        id: 3,
+        nome: 'Doce'
+    }
+]
+
+export default { menuOptions, marmitasTamanho, tableCliente, tableGastos, empresas, tiposProdutos };
