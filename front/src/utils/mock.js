@@ -134,6 +134,10 @@ const tableProdutos = [
     {
         id: 3,
         nome: 'Valor produto',
+    },
+    {
+        id: 4,
+        nome: 'Ações',
     }
 ]
 
