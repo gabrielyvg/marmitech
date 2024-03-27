@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useState } from "react";
 import { produtoService } from '../../services/produtoService';
 import CurrencyInput from 'react-currency-input-field';
+import { toast, ToastContainer } from 'react-nextjs-toast'
 
 export default function CadastrarProdutos() {
   const router = useRouter();
@@ -35,11 +36,21 @@ export default function CadastrarProdutos() {
     setIsLoading(true);
 
     try {
-      await produtoService.salvar({
+      const result = await produtoService.salvar({
         data: dadosFormulario,
       });
+
+      toast.notify(result.mensagem, {
+        title: 'Salvo!',
+        duration: 5,
+        type: "success"
+      })
     } catch (error) {
-      console.log(err);
+      toast.notify(error.message, {
+        title: 'Erro!',
+        duration: 5,
+        type: "error"
+      })
     } finally {
       setIsLoading(false);
     }
@@ -117,6 +128,7 @@ export default function CadastrarProdutos() {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </section>
   )
 }
