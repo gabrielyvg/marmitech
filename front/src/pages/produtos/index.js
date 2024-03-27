@@ -18,7 +18,7 @@ export default function Produtos() {
                 })
         })
     }, []);
-    
+
     const addProduto = () => {
         router.push('/produtos/cadastrar-produtos');
     }
@@ -44,7 +44,13 @@ export default function Produtos() {
                                     <tr key={row.id} className='text-center'>
                                         <td>{row.nome}</td>
                                         <td>{row.tipo}</td>
-                                        <td>{row.valor}</td>
+                                        <td>{
+                                            new Intl.NumberFormat('pt-BR', {
+                                                style: 'currency',
+                                                currency: 'BRL',
+                                            })
+                                            .format(row.valor / 100)}
+                                        </td>
                                     </tr>
                                 ))
                             }
