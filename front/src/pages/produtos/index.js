@@ -1,7 +1,9 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { produtoService } from '../../services/produtoService'
+import { produtoService } from '../../services/produtoService';
 import mock from '@/utils/mock';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { toast, ToastContainer } from 'react-nextjs-toast';
 
 export default function Produtos() {
     const router = useRouter();
@@ -22,6 +24,33 @@ export default function Produtos() {
     const addProduto = () => {
         router.push('/produtos/cadastrar-produtos');
     }
+
+    const editarProduto = () => {
+        // manda pro save com o edit
+    }
+
+    const removerProduto = async (id) => {
+        try {
+            const result = await produtoService.remover({
+                id: id,
+            });
+
+            toast.notify(result.mensagem, {
+                title: 'Removido com sucesso!',
+                duration: 3,
+                type: "success"
+            })
+        } catch (error) {
+            toast.notify(error.message, {
+                title: 'Erro!',
+                duration: 3,
+                type: "error"
+            })
+        } finally {
+            router.reload();
+        }
+    }
+
     return (
         <>
             <section>
@@ -49,7 +78,21 @@ export default function Produtos() {
                                                 style: 'currency',
                                                 currency: 'BRL',
                                             })
-                                            .format(row.valor / 100)}
+                                                .format(row.valor / 100)}
+                                        </td>
+                                        <td>
+                                            <FontAwesomeIcon
+                                                icon="pen-to-square"
+                                                className='mr-3 cursor-pointer text-orange-600'
+                                                title='Editar'
+                                                onClick={editarProduto(row)}
+                                            />
+                                            <FontAwesomeIcon
+                                                icon="trash-can"
+                                                className='cursor-pointer text-red-700'
+                                                title='Excluir'
+                                                onClick={() => removerProduto(row.id)}
+                                            />
                                         </td>
                                     </tr>
                                 ))
@@ -57,6 +100,7 @@ export default function Produtos() {
                         </tbody>
                     </table>
                 </div>
+                <ToastContainer />
             </section>
         </>
     )
