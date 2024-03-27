@@ -122,4 +122,19 @@ const tiposProdutos = [
     }
 ]
 
-export default { menuOptions, marmitasTamanho, tableCliente, tableGastos, empresas, tiposProdutos };
+const tableProdutos = [
+    {
+        id: 1,
+        nome: 'Nome produto',
+    },
+    {
+        id: 2,
+        nome: 'Tipo produto',
+    },
+    {
+        id: 3,
+        nome: 'Valor produto',
+    }
+]
+
+export default { menuOptions, marmitasTamanho, tableCliente, tableGastos, empresas, tiposProdutos, tableProdutos };

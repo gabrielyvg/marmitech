@@ -1,7 +1,24 @@
 import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { produtoService } from '../../services/produtoService'
+import mock from '@/utils/mock';
 
 export default function Produtos() {
     const router = useRouter();
+    const [produtos, setClientes] = useState([]);
+
+    useEffect(() => {
+        setTimeout(() => {
+            produtoService.listar()
+                .then((response) => {
+                    setClientes(response);
+                })
+                .catch((error) => {
+                    console.error(error);
+                })
+        })
+    }, []);
+    
     const addProduto = () => {
         router.push('/produtos/cadastrar-produtos');
     }
@@ -14,17 +31,23 @@ export default function Produtos() {
                     <table className='table-auto border-separate sm:border-spacing-1 md:border-spacing-4 lg:border-spacing-6 border border-slate-300 rounded-lg'>
                         <thead>
                             <tr>
-                               <th>Nome produto</th>
-                               <th>Tipo produto</th>
-                               <th>Valor produto</th>
+                                {mock.tableProdutos.map
+                                    ((column) => (
+                                        <th key={column.id}>{column.nome}</th>
+                                    ))
+                                }
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Coca-cola</td>
-                                <td>Bebida</td>
-                                <td>R$ 3,00</td>
-                            </tr>
+                            {produtos.map
+                                ((row) => (
+                                    <tr key={row.id} className='text-center'>
+                                        <td>{row.nome}</td>
+                                        <td>{row.tipo}</td>
+                                        <td>{row.valor}</td>
+                                    </tr>
+                                ))
+                            }
                         </tbody>
                     </table>
                 </div>
