@@ -33,5 +33,27 @@ export const produtoService = {
             console.error('Erro ao salvar produto:', error);
             throw error;
         }
-    }
+    },
+
+    async remover(id) {
+        try {
+            const response = await fetch(`http://localhost:3001/produtos/remover/${JSON.stringify(id)}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao remover produto!');
+            }
+
+            const responseBody = await response.json();
+            return responseBody;
+        } catch (error) {
+            console.error('Erro ao remover produto:', error);
+            throw error;
+        }
+    },
 }
