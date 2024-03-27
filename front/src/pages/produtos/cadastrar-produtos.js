@@ -24,14 +24,10 @@ export default function CadastrarProdutos() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData();
-    Object.entries(dadosFormulario).forEach(([key, value]) => {
-      data.append(key, value);
-    })
 
     produtoService
       .salvar({
-        data: data,
+        data: dadosFormulario,
       })
       .catch((err) => {
         console.log(err);
