@@ -7,9 +7,10 @@ import CurrencyInput from 'react-currency-input-field';
 export default function CadastrarProdutos() {
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [dadosFormulario, setDadosFormulario] = useState({
     nome: '',
-    tipo: '',
+    tipo: 'Marmita',
     valor: ''
   });
 
@@ -31,14 +32,17 @@ export default function CadastrarProdutos() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
 
-    produtoService
-      .salvar({
+    try {
+      await produtoService.salvar({
         data: dadosFormulario,
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+      });
+    } catch (error) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const voltar = () => {
@@ -96,8 +100,20 @@ export default function CadastrarProdutos() {
             </div>
           </div>
           <div className='flex justify-center mt-5'>
-            <button className='border-solid border-2 text-white rounded-md px-5 py-1 mr-3 bg-gray-400 hover:bg-gray-500' onClick={voltar}>Voltar</button>
-            <button className='border-solid border-2 text-white rounded-md px-5 py-1 bg-emerald-500 hover:bg-emerald-600' type="submit">Salvar</button>
+            <button
+              className='border-solid border-2 text-white rounded-md px-5 py-1 mr-3 bg-gray-400 hover:bg-gray-500'
+              onClick={voltar}
+              type="button"
+            >Voltar
+            </button>
+
+            <button
+              className='border-solid border-2 text-white rounded-md px-5 py-1 bg-emerald-500 hover:bg-emerald-600'
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Salvando...' : 'Salvar'}
+            </button>
           </div>
         </form>
       </div>
