@@ -58,7 +58,11 @@ export default function CadastrarProdutos() {
                 placeholder='Nome'
                 value={dadosFormulario.nome}
                 onChange={handleInput}
-                className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5' />
+                className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
+                  text-sm rounded-lg focus:ring-primary-500 
+                  focus:border-primary-500 block w-full p-2.5'
+                required
+              />
             </div>
             <div className='ml-4'>
               <label htmlFor="tipo" className="block mb-2 text-sm font-medium text-gray-900">Tipo de produto</label>
@@ -66,7 +70,9 @@ export default function CadastrarProdutos() {
                 value={dadosFormulario.tipo}
                 onChange={handleInput}
                 className='shadow-sm bg-gray-50 border
-                                    border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5'
+                  border-gray-300 text-gray-900 text-sm rounded-lg 
+                  focus:ring-primary-500 focus:border-primary-500 
+                  block w-full p-2.5'
               >
                 {mockObj.tiposProdutos.map((tipo) => (
                   <option key={tipo.id}>{tipo.nome}</option>
@@ -85,6 +91,7 @@ export default function CadastrarProdutos() {
                 className='shadow-sm bg-gray-50 border border-gray-300
                  text-gray-900 text-sm rounded-lg 
                   focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5'
+                required
               />
             </div>
           </div>
