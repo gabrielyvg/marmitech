@@ -15,6 +15,14 @@ export default function CadastrarProdutos() {
     valor: ''
   });
 
+  const limparDadosDoFormulario = () => {
+    setDadosFormulario({
+      nome: '',
+      tipo: 'Marmita',
+      valor: ''
+    });
+  };
+
   const handleInput = (e) => {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
@@ -42,16 +50,17 @@ export default function CadastrarProdutos() {
 
       toast.notify(result.mensagem, {
         title: 'Salvo!',
-        duration: 5,
+        duration: 3,
         type: "success"
       })
     } catch (error) {
       toast.notify(error.message, {
         title: 'Erro!',
-        duration: 5,
+        duration: 3,
         type: "error"
       })
     } finally {
+      limparDadosDoFormulario();
       setIsLoading(false);
     }
   }
