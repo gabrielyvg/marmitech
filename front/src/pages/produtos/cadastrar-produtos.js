@@ -2,6 +2,7 @@ import mockObj from '@/utils/mock';
 import { useRouter } from 'next/router';
 import { useState } from "react";
 import { produtoService } from '../../services/produtoService';
+import CurrencyInput from 'react-currency-input-field';
 
 export default function CadastrarProdutos() {
   const router = useRouter();
@@ -20,6 +21,12 @@ export default function CadastrarProdutos() {
       ...prevState,
       [fieldName]: fieldValue
     }));
+  }
+
+  const validateValue = (value) => {
+    if (value) {
+      dadosFormulario.valor = value.replace(/[^0-9]/g, '')
+    }
   }
 
   const onSubmit = async (event) => {
@@ -68,13 +75,17 @@ export default function CadastrarProdutos() {
             </div>
             <div className='mr-4 mt-4'>
               <label htmlFor="valor" className="block mb-2 text-sm font-medium text-gray-900">Valor do produto</label>
-              <input type="text"
+              <CurrencyInput
+                intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
                 name="valor"
-                placeholder='R$'
-                value={dadosFormulario.valor}
-                onChange={handleInput}
-                className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5' />
-
+                placeholder="R$"
+                decimalsLimit={2}
+                decimalSeparator=","
+                onValueChange={validateValue}
+                className='shadow-sm bg-gray-50 border border-gray-300
+                 text-gray-900 text-sm rounded-lg 
+                  focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5'
+              />
             </div>
           </div>
           <div className='flex justify-center mt-5'>
