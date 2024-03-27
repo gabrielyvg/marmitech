@@ -62,6 +62,7 @@ export default function CadastrarProdutos() {
     } finally {
       limparDadosDoFormulario();
       setIsLoading(false);
+      voltar();
     }
   }
 
