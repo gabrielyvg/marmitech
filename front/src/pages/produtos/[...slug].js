@@ -1,12 +1,13 @@
 import mockObj from '@/utils/mock';
 import { useRouter } from 'next/router';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { produtoService } from '../../services/produtoService';
 import CurrencyInput from 'react-currency-input-field';
 import { toast, ToastContainer } from 'react-nextjs-toast'
 
 export default function CadastrarProdutos() {
   const router = useRouter();
+  const idProduto = router.query.slug && router.query.slug[1] ? router.query.slug[1] : null;
 
   const [isLoading, setIsLoading] = useState(false);
   const [dadosFormulario, setDadosFormulario] = useState({
@@ -22,6 +23,19 @@ export default function CadastrarProdutos() {
       valor: ''
     });
   };
+
+  useEffect(() => {
+    if (idProduto) {
+      getProdutoById(idProduto)
+    }
+  }, [idProduto]);
+
+  const getProdutoById = async (idProduto) => {
+    const fetchedProdutoData = await produtoService.getById({
+      id: idProduto,
+    });
+    setDadosFormulario(fetchedProdutoData);
+  }
 
   const handleInput = (e) => {
     const fieldName = e.target.name;
@@ -81,7 +95,7 @@ export default function CadastrarProdutos() {
               <input type="text"
                 name="nome"
                 placeholder='Nome'
-                value={dadosFormulario.nome}
+                value={dadosFormulario.nome || ''}
                 onChange={handleInput}
                 className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
                   text-sm rounded-lg focus:ring-primary-500 
@@ -113,6 +127,7 @@ export default function CadastrarProdutos() {
                 decimalsLimit={2}
                 decimalSeparator=","
                 onValueChange={validateValue}
+                value={dadosFormulario.valor}
                 className='shadow-sm bg-gray-50 border border-gray-300
                  text-gray-900 text-sm rounded-lg 
                   focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5'

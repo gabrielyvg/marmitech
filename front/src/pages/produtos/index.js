@@ -30,8 +30,8 @@ export default function Produtos() {
         router.push('/produtos/cadastrar-produtos');
     }
 
-    const editarProduto = () => {
-        // manda pro save com o edit
+    const editarProduto = (idProduto) => {
+        router.push(`/produtos/cadastrar-produtos/${idProduto}`);
     }
 
     const removerProduto = async (id) => {
@@ -111,7 +111,7 @@ export default function Produtos() {
                                                 icon="pen-to-square"
                                                 className='mr-3 cursor-pointer text-orange-600'
                                                 title='Editar'
-                                                onClick={editarProduto(row)}
+                                                onClick={() => editarProduto(row.id)}
                                             />
                                             <FontAwesomeIcon
                                                 icon="trash-can"

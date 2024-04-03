@@ -22,11 +22,11 @@ export const produtoService = {
                     'Access-Control-Allow-Origin': '*'
                 },
             });
-    
+
             if (!response.ok) {
                 throw new Error('Erro ao salvar produto!');
             }
-            
+
             const responseBody = await response.json();
             return responseBody;
         } catch (error) {
@@ -53,6 +53,24 @@ export const produtoService = {
             return responseBody;
         } catch (error) {
             console.error('Erro ao remover produto:', error);
+            throw error;
+        }
+    },
+
+    async getById(id) {
+        try {
+            const response = await fetch(`http://localhost:3001/produtos/listar/${JSON.stringify(id)}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+            });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Erro ao buscar produto:', error);
             throw error;
         }
     },
