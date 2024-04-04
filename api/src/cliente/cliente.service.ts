@@ -12,7 +12,11 @@ export class ClienteService {
   ) { }
 
   async getCliente(): Promise<Cliente[]> {
-    return this.clienteRepository.find();
+    return this.clienteRepository.find({
+      where: [
+        { removido: 0 }
+      ]
+    });
   }
 
   async getClienteById(id: number): Promise<Cliente | null> {
