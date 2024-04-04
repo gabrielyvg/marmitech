@@ -1,21 +1,39 @@
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { clienteService } from '../../services/clienteService';
+import Buttons from '../../components/Buttons';
+import { useState } from 'react';
+import { toast, ToastContainer } from 'react-nextjs-toast'
 
 export default function CadastrarCliente() {
     const router = useRouter();
     const { register, handleSubmit, setValue } = useForm({ defaultValues: {} });
+    const [isLoading, setIsLoading] = useState(false);
 
-    function handleSubmitForm(data) {
-        data.paga_mensalmente = data.paga_mensalmente ? 1 : 0;
+    const handleSubmitForm = async (data) => {
+        setIsLoading(true);
 
-        clienteService
-            .salvar({
+        try {
+            data.paga_mensalmente = data.paga_mensalmente ? 1 : 0;
+            const result = await clienteService.salvar({
                 data: JSON.stringify(data),
             })
-            .catch((err) => {
-                console.log(err);
+
+            toast.notify(result.mensagem, {
+                title: 'Salvo!',
+                duration: 3,
+                type: "success"
             })
+        } catch (error) {
+            toast.notify(error.message, {
+                title: 'Erro!',
+                duration: 3,
+                type: "error"
+            })
+        } finally {
+            setIsLoading(false);
+            voltar();
+        }
     }
 
     const voltar = () => {
@@ -82,12 +100,13 @@ export default function CadastrarCliente() {
                             <label htmlFor="paga_mensalmente" className="text-sm font-medium text-gray-900" >Paga mensalmente</label>
                         </div>
                     </div>
-                    <div className='flex justify-center mt-5'>
-                        <button className='border-solid border-2 text-white rounded-md px-5 py-1 mr-3 bg-gray-400 hover:bg-gray-500' onClick={voltar}>Voltar</button>
-                        <button className='border-solid border-2 text-white rounded-md px-5 py-1 bg-emerald-500 hover:bg-emerald-600' type="submit">Salvar</button>
-                    </div>
+                    <Buttons
+                        voltar={voltar}
+                        isLoading={isLoading}
+                    />
                 </form>
             </div>
+            <ToastContainer />
         </section>
     );
 }
