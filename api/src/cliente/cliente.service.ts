@@ -20,7 +20,7 @@ export class ClienteService {
   }
 
   async salvarCliente(data: ClienteSalvarDto): Promise<ResultadoDto> {
-    let cliente = new Cliente();
+    const cliente = new Cliente();
     console.log('datra', data);
     cliente.nome = data.nome;
     cliente.telefone = data.telefone;
@@ -36,7 +36,7 @@ export class ClienteService {
       mensagem: `Houve um erro ao cadastrar o cliente.`
     } */
     return this.clienteRepository.save(cliente)
-      .then((result) => {
+      .then(() => {
         return <ResultadoDto>{
           status: true,
           mensagem: 'Cliente cadastrado com sucesso'
