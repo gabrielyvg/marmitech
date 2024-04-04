@@ -70,6 +70,10 @@ const tableCliente = [
     {
         id: 7,
         nome: 'Paga Mensalmente'
+    },
+    {
+        id: 8,
+        nome: 'NFe'
     }
 ]
 
