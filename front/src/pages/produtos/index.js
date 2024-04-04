@@ -2,9 +2,9 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { produtoService } from '../../services/produtoService';
 import mock from '@/utils/mock';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast, ToastContainer } from 'react-nextjs-toast';
 import ModalComponent from '../../components/ModalComponent';
+import ActionButtonsTable from '../../components/ActionButtonsTable';
 
 export default function Produtos() {
     const router = useRouter();
@@ -107,17 +107,11 @@ export default function Produtos() {
                                                 .format(row.valor / 100)}
                                         </td>
                                         <td>
-                                            <FontAwesomeIcon
-                                                icon="pen-to-square"
-                                                className='mr-3 cursor-pointer text-orange-600'
-                                                title='Editar'
-                                                onClick={() => editarProduto(row.id)}
-                                            />
-                                            <FontAwesomeIcon
-                                                icon="trash-can"
-                                                className='cursor-pointer text-red-700'
-                                                title='Excluir'
-                                                onClick={() => openModal(row.nome, row.id)}
+                                            <ActionButtonsTable
+                                                nome={row.nome}
+                                                id={row.id}
+                                                editarProduto={editarProduto}
+                                                openModal={openModal}
                                             />
                                         </td>
                                     </tr>
