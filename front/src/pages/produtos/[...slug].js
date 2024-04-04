@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { produtoService } from '../../services/produtoService';
 import CurrencyInput from 'react-currency-input-field';
 import { toast, ToastContainer } from 'react-nextjs-toast'
+import Buttons from '../../components/Buttons';
 
 export default function CadastrarProdutos() {
   const router = useRouter();
@@ -135,22 +136,10 @@ export default function CadastrarProdutos() {
               />
             </div>
           </div>
-          <div className='flex justify-center mt-5'>
-            <button
-              className='border-solid border-2 text-white rounded-md px-5 py-1 mr-3 bg-gray-400 hover:bg-gray-500'
-              onClick={voltar}
-              type="button"
-            >Voltar
-            </button>
-
-            <button
-              className='border-solid border-2 text-white rounded-md px-5 py-1 bg-emerald-500 hover:bg-emerald-600'
-              type="submit"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Salvando...' : 'Salvar'}
-            </button>
-          </div>
+          <Buttons 
+           voltar={voltar}
+           isLoading={isLoading}
+          />
         </form>
       </div>
       <ToastContainer />
