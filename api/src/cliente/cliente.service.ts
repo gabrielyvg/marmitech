@@ -24,8 +24,15 @@ export class ClienteService {
   }
 
   async salvarCliente(data: ClienteSalvarDto): Promise<ResultadoDto> {
-    const cliente = new Cliente();
-    console.log('datra', data);
+    let cliente = new Cliente();
+
+    if (data.id) {
+      cliente = await this.getClienteById(data.id);
+      cliente.id = data.id;
+    } else {
+      cliente = new Cliente();
+    }
+
     cliente.nome = data.nome;
     cliente.telefone = data.telefone;
     cliente.cidade = data.cidade;

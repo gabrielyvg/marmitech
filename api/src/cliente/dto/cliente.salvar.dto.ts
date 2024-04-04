@@ -1,6 +1,6 @@
 export interface ClienteSalvarDto {
+    id: number;
     nome: string;
-    
     telefone?: string;
     endereco?: string;
     numero?: number;
