@@ -13,9 +13,9 @@ export class ClienteController {
         return this.clienteService.getCliente();
     }
 
-    @Get('listar/id')
-    async getClienteById(id): Promise<Cliente> {
-        return this.clienteService.getClienteById(id);
+    @Get('listar/:id')
+    async getClienteById(@Param('id') id): Promise<Cliente> {
+        return this.clienteService.getClienteById(JSON.parse(id).id);
     }
 
     @Post('salvar')

@@ -1,13 +1,15 @@
 import { useRouter } from 'next/router';
 import { clienteService } from '../../services/clienteService';
 import Buttons from '../../components/Buttons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast, ToastContainer } from 'react-nextjs-toast'
 
 export default function CadastrarCliente() {
     const router = useRouter();
+    const idCliente = router.query.slug && router.query.slug[1] ? router.query.slug[1] : null;
+
     const [isLoading, setIsLoading] = useState(false);
-    
+
     const [dadosFormulario, setDadosFormulario] = useState({
         nome: '',
         telefone: '',
@@ -22,7 +24,7 @@ export default function CadastrarCliente() {
     const handleInput = (e) => {
         const fieldName = e.target.name;
         const fieldValue = e.target.value;
-        
+
         setDadosFormulario((prevState) => ({
             ...prevState,
             [fieldName]: fieldValue
@@ -32,7 +34,7 @@ export default function CadastrarCliente() {
     const onSubmit = async (event) => {
         event.preventDefault();
         setIsLoading(true);
-        
+
         try {
             dadosFormulario.paga_mensalmente = dadosFormulario.paga_mensalmente ? 1 : 0;
             dadosFormulario.nfe = dadosFormulario.nfe ? 1 : 0;
@@ -59,6 +61,19 @@ export default function CadastrarCliente() {
 
     const voltar = () => {
         router.push('/clientes/');
+    }
+
+    useEffect(() => {
+        if (idCliente) {
+            getClienteById(idCliente)
+        }
+    }, [idCliente]);
+
+    const getClienteById = async (idCliente) => {
+        const fetchedClienteData = await clienteService.getById({
+            id: idCliente,
+        });
+        setDadosFormulario(fetchedClienteData);
     }
 
     return (

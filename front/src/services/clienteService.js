@@ -57,4 +57,22 @@ export const clienteService = {
         }
     },
 
+    async getById(id) {
+        try {
+            const response = await fetch(`http://localhost:3001/cliente/listar/${JSON.stringify(id)}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+            });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Erro ao buscar cliente:', error);
+            throw error;
+        }
+    },
+
 }
