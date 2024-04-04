@@ -29,6 +29,7 @@ export class ClienteService {
     cliente.endereco = data.endereco;
     cliente.numero = data.numero;
     cliente.paga_mensalmente = data.paga_mensalmente;
+    cliente.nfe = data.nfe;
     cliente.removido = data.removido = 0;
    /*  return <ResultadoDto>{
       status: false,

@@ -26,6 +26,9 @@ export class Cliente {
   @Column({ default: 0 })
   paga_mensalmente: number;
 
+  @Column({ default: '0' })
+  nfe: string;
+
   @Column({ default: 0 })
   removido: number;
 

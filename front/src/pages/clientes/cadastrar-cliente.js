@@ -16,6 +16,7 @@ export default function CadastrarCliente() {
         endereco: '',
         numero: '',
         paga_mensalmente: false,
+        nfe: false,
     });
 
     const handleInput = (e) => {
@@ -34,6 +35,7 @@ export default function CadastrarCliente() {
         
         try {
             dadosFormulario.paga_mensalmente = dadosFormulario.paga_mensalmente ? 1 : 0;
+            dadosFormulario.nfe = dadosFormulario.nfe ? 1 : 0;
             const result = await clienteService.salvar({
                 data: dadosFormulario,
             })
@@ -128,6 +130,16 @@ export default function CadastrarCliente() {
                                 className='mr-1'
                             />
                             <label htmlFor="paga_mensalmente" className="text-sm font-medium text-gray-900" >Paga mensalmente</label>
+                        </div>
+                        <div className='ml-4 mt-4'>
+                            <input type="checkbox"
+                                id="nfe"
+                                name="nfe"
+                                value={dadosFormulario.nfe}
+                                onChange={handleInput}
+                                className='mr-1'
+                            />
+                            <label htmlFor="nfe" className="text-sm font-medium text-gray-900" >Necessário tirar nota?</label>
                         </div>
                     </div>
                     <Buttons
