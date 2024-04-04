@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post } from "@nestjs/common";
 import { ClienteService } from "./cliente.service";
 import { Cliente } from "./cliente.entity";
 import { ClienteSalvarDto } from "./dto/cliente.salvar.dto";
@@ -20,7 +20,7 @@ export class ClienteController {
 
     @Post('salvar')
     async salvarCliente(@Body() cliente: ClienteSalvarDto): Promise<ResultadoDto> {
-        return this.clienteService.salvarCliente(JSON.parse(cliente['data']));
+        return this.clienteService.salvarCliente(cliente['data']);
     }
 
     @Delete('remover')
