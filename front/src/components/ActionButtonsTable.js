@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default function ActionButtonsTable({ nome, id, editarProduto, openModal}) {
+export default function ActionButtonsTable({ nome, id, editar, openModal}) {
   return (
     <>
       <FontAwesomeIcon
         icon="pen-to-square"
         className='mr-3 cursor-pointer text-orange-600'
         title='Editar'
-        onClick={() => editarProduto(id)}
+        onClick={() => editar(id)}
       />
       <FontAwesomeIcon
         icon="trash-can"

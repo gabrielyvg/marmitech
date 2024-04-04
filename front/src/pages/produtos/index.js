@@ -110,7 +110,7 @@ export default function Produtos() {
                                             <ActionButtonsTable
                                                 nome={row.nome}
                                                 id={row.id}
-                                                editarProduto={editarProduto}
+                                                editar={editarProduto}
                                                 openModal={openModal}
                                             />
                                         </td>
