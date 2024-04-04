@@ -74,6 +74,10 @@ const tableCliente = [
     {
         id: 8,
         nome: 'NFe'
+    },
+    {
+        id: 9,
+        nome: 'Ações',
     }
 ]
 

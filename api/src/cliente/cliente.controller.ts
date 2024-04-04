@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
 import { ClienteService } from "./cliente.service";
 import { Cliente } from "./cliente.entity";
 import { ClienteSalvarDto } from "./dto/cliente.salvar.dto";
@@ -23,8 +23,8 @@ export class ClienteController {
         return this.clienteService.salvarCliente(cliente['data']);
     }
 
-    @Delete('remover')
-    async removeCliente(id): Promise<void> {
-        await this.clienteService.removeCliente(id);
+    @Put('remover/:id')
+    async removeCliente(@Param('id') id): Promise<ResultadoDto> {
+        return this.clienteService.removeCliente(JSON.parse(id).id);
     }
 }

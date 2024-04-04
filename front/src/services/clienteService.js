@@ -33,5 +33,28 @@ export const clienteService = {
             console.error('Erro ao salvar cliente:', error);
             throw error;
         }
-    }
+    },
+    
+    async remover(id) {
+        try {
+            const response = await fetch(`http://localhost:3001/cliente/remover/${JSON.stringify(id)}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao remover cliente!');
+            }
+
+            const responseBody = await response.json();
+            return responseBody;
+        } catch (error) {
+            console.error('Erro ao remover cliente:', error);
+            throw error;
+        }
+    },
+
 }

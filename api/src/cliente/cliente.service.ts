@@ -31,10 +31,10 @@ export class ClienteService {
     cliente.paga_mensalmente = data.paga_mensalmente;
     cliente.nfe = data.nfe;
     cliente.removido = data.removido = 0;
-   /*  return <ResultadoDto>{
-      status: false,
-      mensagem: `Houve um erro ao cadastrar o cliente.`
-    } */
+    /*  return <ResultadoDto>{
+       status: false,
+       mensagem: `Houve um erro ao cadastrar o cliente.`
+     } */
     return this.clienteRepository.save(cliente)
       .then(() => {
         return <ResultadoDto>{
@@ -50,7 +50,24 @@ export class ClienteService {
       });
   }
 
-  async removeCliente(id: number): Promise<void> {
-    await this.clienteRepository.delete(id);
+  async removeCliente(id: number): Promise<ResultadoDto> {
+    const cliente = await this.getClienteById(id)
+
+    if (cliente.removido === 0) {
+      cliente.removido = 1;
+    }
+
+    return this.clienteRepository.save(cliente)
+      .then(() => {
+        return <ResultadoDto>{
+          status: true,
+          mensagem: 'Cliente removido com sucesso'
+        }
+      }).catch((error) => {
+        return <ResultadoDto>{
+          status: false,
+          mensagem: `Houve um erro ao remover o cliente. ${error}`
+        }
+      });
   }
 }
