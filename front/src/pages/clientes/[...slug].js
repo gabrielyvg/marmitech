@@ -23,7 +23,7 @@ export default function CadastrarCliente() {
 
     const handleInput = (e) => {
         const fieldName = e.target.name;
-        const fieldValue = e.target.value;
+        const fieldValue = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
 
         setDadosFormulario((prevState) => ({
             ...prevState,
@@ -73,7 +73,13 @@ export default function CadastrarCliente() {
         const fetchedClienteData = await clienteService.getById({
             id: idCliente,
         });
-        setDadosFormulario(fetchedClienteData);
+        const updatedData = {
+            ...fetchedClienteData,
+            nfe: fetchedClienteData.nfe === '1' ? true : false,
+            paga_mensalmente: fetchedClienteData.paga_mensalmente === 1 ? true : false
+        };
+    
+        setDadosFormulario(updatedData);
     }
 
     return (
@@ -141,6 +147,7 @@ export default function CadastrarCliente() {
                                 id="paga_mensalmente"
                                 name="paga_mensalmente"
                                 value={dadosFormulario.paga_mensalmente}
+                                checked={dadosFormulario.paga_mensalmente}
                                 onChange={handleInput}
                                 className='mr-1'
                             />
@@ -151,6 +158,7 @@ export default function CadastrarCliente() {
                                 id="nfe"
                                 name="nfe"
                                 value={dadosFormulario.nfe}
+                                checked={dadosFormulario.nfe}
                                 onChange={handleInput}
                                 className='mr-1'
                             />
