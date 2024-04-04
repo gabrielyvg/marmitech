@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import mock from '@/utils/mock';
 import ActionButtonsTable from '../../components/ActionButtonsTable';
 import ModalComponent from '../../components/ModalComponent';
+import { toast, ToastContainer } from 'react-nextjs-toast'
 
 export default function Clientes() {
     const router = useRouter();
@@ -118,6 +119,7 @@ export default function Clientes() {
                         </tbody>
                     </table>
                 </div>
+                <ToastContainer />
             </section>
         </>
     )
