@@ -5,6 +5,7 @@ import { pedidoService } from '../../services/pedidoService';
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
+import Buttons from '../../components/Buttons';
 
 export default function CadastrarPedidos() {
     const router = useRouter();
@@ -82,10 +83,7 @@ export default function CadastrarPedidos() {
                             <label htmlFor="pago" className="text-sm font-medium text-gray-900" >Pago</label>
                         </div>
                     </div>
-                    <div className='flex justify-center mt-5'>
-                        <button className='border-solid border-2 text-white rounded-md px-5 py-1 mr-3 bg-gray-400 hover:bg-gray-500' onClick={voltar}>Voltar</button>
-                        <button className='border-solid border-2 text-white rounded-md px-5 py-1 bg-emerald-500 hover:bg-emerald-600' type="submit">Salvar</button>
-                    </div>
+                    <Buttons/>
                 </form>
             </div>
         </section>
