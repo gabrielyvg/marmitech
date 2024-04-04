@@ -68,10 +68,6 @@ const tableCliente = [
         nome: 'Endereço',
     },
     {
-        id: 6,
-        nome: 'Quantidade',
-    },
-    {
         id: 7,
         nome: 'Paga Mensalmente'
     }
