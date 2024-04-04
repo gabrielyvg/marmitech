@@ -13,18 +13,25 @@ export const clienteService = {
     },
 
     async salvar(dados) {
-        console.log('sdafasdf',dados);
-        const response = await fetch('http://localhost:3001/cliente/salvar', {
-            method: 'POST',
-            body:  JSON.stringify(dados),
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-        }).then(async (respostaDoServidor) => {
-            if (!respostaDoServidor.ok) throw new Error('Erro ao salvar cliente!');
-            const body = respostaDoServidor.body;
-            return body;
-        })
+        try {
+            const response = await fetch('http://localhost:3001/cliente/salvar', {
+                method: 'POST',
+                body: JSON.stringify(dados),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+            })
+
+            if (!response.ok) {
+                throw new Error('Erro ao salvar cliente!');
+            }
+
+            const responseBody = await response.json();
+            return responseBody;
+        } catch (error) {
+            console.error('Erro ao salvar cliente:', error);
+            throw error;
+        }
     }
 }
