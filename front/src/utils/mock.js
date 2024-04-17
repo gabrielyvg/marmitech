@@ -10,19 +10,29 @@ const menuOptions = [
         url: '/clientes',
         subitem: {
             id: "cadastrar-cliente",
-            title: "Cadastrar cliente",
+            title: "Adicionar cliente",
             url: '/clientes/cadastrar-cliente',
         }
     },
     {
         id: "pedidos",
         title: "Pedidos",
-        url: '/pedidos'
+        url: '/pedidos',
+        subitem: {
+            id: "cadastrar-pedidos",
+            title: "Adicionar Pedidos",
+            url: '/pedidos/cadastrar-pedidos',
+        }
     },
     {
         id: "produtos",
         title: "Produtos",
-        url: '/produtos'
+        url: '/produtos',
+        subitem: {
+            id: "cadastrar-produtos",
+            title: "Adicionar produtos",
+            url: '/produtos/cadastrar-produtos',
+        }
     },
     {
         id: "financeiro",
