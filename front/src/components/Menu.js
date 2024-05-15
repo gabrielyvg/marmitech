@@ -15,7 +15,7 @@ export default function Menu() {
         <aside className='fixed top-0 left-0 w-64 h-full shadow-lg shadow-black' aria-label="Sidenav">
             <div className='mt-6 mb-2 flex items-center justify-center'>
                 <FontAwesomeIcon className='mr-2' icon={faKitchenSet} />
-                <h1 className='font-bold text-2xl'>Marmitech</h1>
+                <a className='font-bold text-2xl' href='/home'>Marmitech</a>
             </div>
             <div className='border'>
                 <ul>

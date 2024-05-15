@@ -1,10 +1,5 @@
 const menuOptions = [
     {
-        id: "home",
-        title: "Inicio",
-        url: '/home'
-    },
-    {
         id: "clientes",
         title: "Clientes",
         subtitle: 'Listar clientes',
