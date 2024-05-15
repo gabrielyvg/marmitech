@@ -2,18 +2,22 @@ import Link from 'next/link';
 import mockObject from '../utils/mock';
 import React, { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faSortDown, faKitchenSet } from '@fortawesome/free-solid-svg-icons';
 
-export default function Header() {
+export default function Menu() {
     const [expandedMenuId, setExpandedMenuId] = useState(null);
 
     const handleTitleClick = (id) => {
         setExpandedMenuId(id === expandedMenuId ? null : id);
     };
-    
+
     return (
         <aside className='fixed top-0 left-0 w-64 h-full shadow-lg shadow-black' aria-label="Sidenav">
-            <div>
+            <div className='mt-6 mb-2 flex items-center justify-center'>
+                <FontAwesomeIcon className='mr-2' icon={faKitchenSet} />
+                <h1 className='font-bold text-2xl'>Marmitech</h1>
+            </div>
+            <div className='border'>
                 <ul>
                     {mockObject.menuOptions.map((menu) => (
                         <li key={menu.id}>
@@ -26,7 +30,10 @@ export default function Header() {
                                 />
                             </div>
                             {expandedMenuId === menu.id && (
-                                <ul className='m-2'>
+                                <ul className='m-2 list-disc'>
+                                    <li className='mb-2'>
+                                        <Link className="p-4 ml-10" href={menu.url}>{menu.subtitle}</Link>
+                                    </li>
                                     <li key={menu.subitem.id}>
                                         <Link className="p-4 ml-10" href={menu.subitem.url}>{menu.subitem.title}</Link>
                                     </li>
