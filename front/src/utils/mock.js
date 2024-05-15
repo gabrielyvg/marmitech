@@ -7,6 +7,7 @@ const menuOptions = [
     {
         id: "clientes",
         title: "Clientes",
+        subtitle: 'Listar clientes',
         url: '/clientes',
         subitem: {
             id: "cadastrar-cliente",
@@ -17,6 +18,7 @@ const menuOptions = [
     {
         id: "pedidos",
         title: "Pedidos",
+        subtitle: 'Listar pedidos',
         url: '/pedidos',
         subitem: {
             id: "cadastrar-pedidos",
@@ -27,6 +29,7 @@ const menuOptions = [
     {
         id: "produtos",
         title: "Produtos",
+        subtitle: 'Listar produtos',
         url: '/produtos',
         subitem: {
             id: "cadastrar-produtos",
