@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { DatabaseModule } from '../database/database.module';
 import { pedidoProviders } from './pedido.providers';
 import { PedidoService } from './pedido.service';
-import { ClienteController } from 'src/cliente/cliente.controller';
+import { PedidoController } from './pedido.controller';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [ClienteController],
+  controllers: [PedidoController],
   providers: [
     ...pedidoProviders,
     PedidoService,

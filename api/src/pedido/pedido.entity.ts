@@ -6,8 +6,23 @@ export class Pedido {
   id: number;
 
   @Column()
-  idCliente: number;
+  idCliente?: number;
 
   @Column()
   idProduto: number;
+
+  @Column()
+  pago: number;
+
+  @Column()
+  data: Date;
+
+  @Column()
+  nomeCliente?: string;
+
+  @Column()
+  quantidade?: number;
+
+  @Column({ default: 0 })
+  removido: number;
 }
