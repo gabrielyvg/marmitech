@@ -24,13 +24,25 @@ export class ClienteService {
   }
 
   async salvarCliente(data: ClienteSalvarDto): Promise<ResultadoDto> {
-    let cliente = new Cliente();
+    let cliente: Cliente;
 
     if (data.id) {
-      cliente = await this.getClienteById(data.id);
-      cliente.id = data.id;
+      cliente = await this.clienteRepository.findOne({ where: { id: data.id } });
+      if (!cliente) {
+        return {
+          status: false,
+          mensagem: 'Cliente não encontrado',
+        };
+      }
     } else {
       cliente = new Cliente();
+    }
+
+    if (!data.nome) {
+      return {
+        status: false,
+        mensagem: 'Campos obrigatórios não podem estar vazios',
+      };
     }
 
     cliente.nome = data.nome;
@@ -39,26 +51,24 @@ export class ClienteService {
     cliente.bairro = data.bairro;
     cliente.endereco = data.endereco;
     cliente.numero = data.numero;
-    cliente.paga_mensalmente = data.paga_mensalmente;
-    cliente.nfe = data.nfe;
-    cliente.removido = data.removido = 0;
-    /*  return <ResultadoDto>{
-       status: false,
-       mensagem: `Houve um erro ao cadastrar o cliente.`
-     } */
-    return this.clienteRepository.save(cliente)
-      .then(() => {
-        return <ResultadoDto>{
-          status: true,
-          mensagem: 'Cliente cadastrado com sucesso'
-        }
-      }).catch((error) => {
-        console.error('Error saving cliente:', error);
-        return <ResultadoDto>{
-          status: false,
-          mensagem: `Houve um erro ao cadastrar o cliente. ${error}`
-        }
-      });
+    cliente.paga_mensalmente = data.paga_mensalmente ?? 0;
+    cliente.paga_semanalmente = data.paga_semanalmente ?? 0;
+    cliente.nfe = data.nfe ?? '0';
+    cliente.removido = data.removido ?? 0;
+
+    try {
+      await this.clienteRepository.save(cliente);
+      return {
+        status: true,
+        mensagem: 'Cliente cadastrado com sucesso',
+      };
+    } catch (error) {
+      console.error('Error saving cliente:', error);
+      return {
+        status: false,
+        mensagem: `Houve um erro ao cadastrar o cliente. ${error.message}`,
+      };
+    }
   }
 
   async removeCliente(id: number): Promise<ResultadoDto> {

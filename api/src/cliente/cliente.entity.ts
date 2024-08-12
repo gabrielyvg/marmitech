@@ -25,13 +25,15 @@ export class Cliente {
 
   @Column({ default: 0 })
   paga_mensalmente: number;
-
+  
   @Column({ default: '0' })
   nfe: string;
 
   @Column({ default: 0 })
   removido: number;
-
+    
+  @Column({ default: 0 })
+  paga_semanalmente: number;
   // @CreateDateColumn()
   // created_at: Date;
 

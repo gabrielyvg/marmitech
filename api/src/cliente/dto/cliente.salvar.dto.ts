@@ -7,7 +7,8 @@ export interface ClienteSalvarDto {
     bairro?: string;
     cidade?: string;
     paga_mensalmente?: number;
-    nfe: string;
+    paga_semanalmente?: number;
+    nfe?: string;
     removido?: number;
     // created_at?: Date;
     // updated_at?: Date;
