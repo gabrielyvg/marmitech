@@ -5,17 +5,17 @@
     top: 100px;
 }
 
-.container div {
+/* .container div {
     display: flex;
     flex-direction: column;
-}
+} */
 
 .box {
     width: 20rem;
     height: 20rem;
     justify-content: center;
     align-items: center;
-    background-color: #dfdfdf;
+    /* background-color: #dfdfdf; */
     border-radius: 50px;
     padding-bottom: 30px;
 }

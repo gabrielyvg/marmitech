@@ -16,6 +16,7 @@ export default function CadastrarPedidos() {
         nome: '',
         tamanho: '',
         pago: false,
+        data: ''
     });
     const [clientes, setClientes] = useState([]);
     const [produtos, setProdutos] = useState([]);
@@ -140,8 +141,12 @@ export default function CadastrarPedidos() {
                             }
                         </div>
 
-                           <div className='ml-4 mt-4'>
-                            <DatePicker />
+                        <div className='ml-4 mt-4'>
+                            <DatePicker
+                                label='Data'
+                                value={dadosFormulario.data}
+                                onChange={handleInput}
+                            />
                         </div>
                         <div className='ml-4 mt-4'>
                             <input type="checkbox" id="pago" name="pago" className='mr-1' checked={dadosFormulario.pago} onChange={handleInput} />

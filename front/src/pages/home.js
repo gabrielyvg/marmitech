@@ -1,5 +1,10 @@
 import { Chart } from "react-google-charts";
 
+export const metadata = {
+    title: 'Marmitech',
+    description: ':D',
+}
+
 export const data = [
     ["Month", "Vendido", "Gasto"],
     ["Janeiro", 1000, 400],

@@ -65,26 +65,18 @@ const tableCliente = [
     },
     {
         id: 3,
-        nome: 'Bairro',
-    },
-    {
-        id: 4,
-        nome: 'Cidade',
-    },
-    {
-        id: 5,
-        nome: 'Endereço',
-    },
-    {
-        id: 7,
         nome: 'Paga Mensalmente'
     },
     {
-        id: 8,
+        id: 4,
+        nome: 'Paga Semanalmente'
+    },
+    {
+        id: 5,
         nome: 'NFe'
     },
     {
-        id: 9,
+        id: 6,
         nome: 'Ações',
     }
 ]

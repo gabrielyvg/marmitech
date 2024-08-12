@@ -16,8 +16,9 @@ export default function CadastrarCliente() {
         bairro: '',
         cidade: '',
         endereco: '',
-        numero: '',
+        numero: 0,
         paga_mensalmente: false,
+        paga_semanalmente: false,
         nfe: false,
     });
 
@@ -37,6 +38,7 @@ export default function CadastrarCliente() {
 
         try {
             dadosFormulario.paga_mensalmente = dadosFormulario.paga_mensalmente ? 1 : 0;
+            dadosFormulario.paga_semanalmente = dadosFormulario.paga_semanalmente ? 1 : 0;
             dadosFormulario.nfe = dadosFormulario.nfe ? 1 : 0;
             const result = await clienteService.salvar({
                 data: dadosFormulario,
@@ -76,7 +78,8 @@ export default function CadastrarCliente() {
         const updatedData = {
             ...fetchedClienteData,
             nfe: fetchedClienteData.nfe === '1' ? true : false,
-            paga_mensalmente: fetchedClienteData.paga_mensalmente === 1 ? true : false
+            paga_mensalmente: fetchedClienteData.paga_mensalmente === 1 ? true : false,
+            paga_semanalmente: fetchedClienteData.paga_semanalmente === 1 ? true : false
         };
     
         setDadosFormulario(updatedData);
@@ -152,6 +155,17 @@ export default function CadastrarCliente() {
                                 className='mr-1'
                             />
                             <label htmlFor="paga_mensalmente" className="text-sm font-medium text-gray-900" >Paga mensalmente</label>
+                        </div>
+                        <div className='ml-4 mt-4'>
+                            <input type="checkbox"
+                                id="paga_semanalmente"
+                                name="paga_semanalmente"
+                                value={dadosFormulario.paga_semanalmente}
+                                checked={dadosFormulario.paga_semanalmente}
+                                onChange={handleInput}
+                                className='mr-1'
+                            />
+                            <label htmlFor="paga_semanalmente" className="text-sm font-medium text-gray-900" >Paga semanalmente</label>
                         </div>
                         <div className='ml-4 mt-4'>
                             <input type="checkbox"
