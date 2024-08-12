@@ -1,6 +1,6 @@
 export const pedidoService = {
     async listar() {
-        const response = await fetch('http://localhost:3000/pedido/listar', {
+        const response = await fetch('http://localhost:3001/pedido/listar', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -12,10 +12,11 @@ export const pedidoService = {
         return data;
     },
 
-    async salvar({ dados }) {
-        const response = await fetch('http://localhost:3000/pedido/salvar', {
+    async salvar(dados) {
+        console.log('dados', dados)
+        const response = await fetch('http://localhost:3001/pedido/salvar', {
             method: 'POST',
-            body: dados,
+            body: JSON.stringify(dados),
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'

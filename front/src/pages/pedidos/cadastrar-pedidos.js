@@ -1,22 +1,19 @@
-import mockObj from '@/utils/mock';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import { pedidoService } from '../../services/pedidoService';
-import DatePicker from 'react-date-picker';
-import 'react-date-picker/dist/DatePicker.css';
-import 'react-calendar/dist/Calendar.css';
-import Buttons from '../../components/Buttons';
 import { produtoService } from '../../services/produtoService';
 import { clienteService } from '../../services/clienteService';
+import Buttons from '../../components/Buttons';
 
 export default function CadastrarPedidos() {
     const router = useRouter();
 
     const [dadosFormulario, setDadosFormulario] = useState({
-        nome: '',
-        tamanho: '',
+        idCliente: 0,
         pago: false,
-        data: ''
+        date: '',
+        nomeCliente: '',
+        idsProdutos: []
     });
     const [clientes, setClientes] = useState([]);
     const [produtos, setProdutos] = useState([]);
@@ -30,52 +27,84 @@ export default function CadastrarPedidos() {
         const fieldName = e.target.name;
         const fieldValue = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
 
-        setDadosFormulario((prevState) => ({
-            ...prevState,
-            [fieldName]: fieldValue
-        }));
-    }
+        if (fieldName.includes('produto')) {
+            const [_, idProduto, tipo] = fieldName.split('_');
+            const id = parseInt(idProduto);
 
+            if (tipo === 'checked') {
+                setDadosFormulario((prevState) => {
+                    const isSelected = prevState.idsProdutos.some(produto => produto.idProduto === id);
+                    if (e.target.checked) {
+                        if (!isSelected) {
+                            return {
+                                ...prevState,
+                                idsProdutos: [...prevState.idsProdutos, { idProduto: id, quantidade: 0 }]
+                            };
+                        }
+                    } else {
+                        return {
+                            ...prevState,
+                            idsProdutos: prevState.idsProdutos.filter(produto => produto.idProduto !== id)
+                        };
+                    }
+                });
+            } else if (tipo === 'quantidade') {
+                setDadosFormulario((prevState) => ({
+                    ...prevState,
+                    idsProdutos: prevState.idsProdutos.map(produto =>
+                        produto.idProduto === id ? { ...produto, quantidade: Number(fieldValue) } : produto
+                    )
+                }));
+            }
+        } else {
+            setDadosFormulario((prevState) => ({
+                ...prevState,
+                [fieldName]: fieldValue
+            }));
+        }
+    };
 
     const onSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData();
-        Object.entries(dadosFormulario).forEach(([key, value]) => {
-            data.append(key, value);
-        })
-        pedidoService
-            .salvar({
-                data: data,
-            })
-            .catch((err) => {
-                console.log(err);
-                /* alert('Erro ao salvar'); */
-            })
+
+        const data = {
+            idCliente: dadosFormulario.idCliente,
+            pago: dadosFormulario.pago ? 1 : 0,
+            date: dadosFormulario.date,
+            idsProdutos: dadosFormulario.idsProdutos,
+            nomeCliente: dadosFormulario.nomeCliente
+        };
+        console.log(data);
+        try {
+            await pedidoService.salvar(data);
+        } catch (err) {
+            console.log(err);
+            // alert('Erro ao salvar');
+        }
     };
 
+
     const getCliente = async () => {
-        await clienteService.listar()
-            .then((response) => {
-                setClientes(response);
-            })
-            .catch((error) => {
-                console.error(error);
-            })
-    }
+        try {
+            const response = await clienteService.listar();
+            setClientes(response);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const getProdutos = async () => {
-        await produtoService.listar()
-            .then((response) => {
-                setProdutos(response);
-            })
-            .catch((error) => {
-                console.error(error);
-            })
-    }
+        try {
+            const response = await produtoService.listar();
+            setProdutos(response);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const voltar = () => {
         router.push('/pedidos/');
-    }
+    };
 
     return (
         <section className="bg-neutral-100">
@@ -84,25 +113,29 @@ export default function CadastrarPedidos() {
                 <form onSubmit={onSubmit}>
                     <div className='grid grid-cols-2'>
                         <div className='mr-4'>
-                            <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-900">Nome cliente</label>
-                            <input type="text"
-                                name="nome"
+                            <label htmlFor="nomeCliente" className="block mb-2 text-sm font-medium text-gray-900">Nome cliente</label>
+                            <input
+                                type="text"
+                                name="nomeCliente"
                                 placeholder='Nome'
-                                value={dadosFormulario.nome}
+                                value={dadosFormulario.nomeCliente}
                                 onChange={handleInput}
-                                className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5' />
+                                className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5'
+                            />
                         </div>
 
                         <div className='ml-4'>
                             <label htmlFor="cliente" className="block mb-2 text-sm font-medium text-gray-900">Selecionar Cliente</label>
-                            <select id='cliente' name='cliente'
-                                /*  value={dadosFormulario.nome} */
+                            <select
+                                id='cliente'
+                                name='idCliente'
+                                value={dadosFormulario.idCliente}
                                 onChange={handleInput}
-                                className='shadow-sm bg-gray-50 border
-                                    border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5'
+                                className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5'
                             >
+                                <option value="">Selecione um cliente</option>
                                 {clientes.map((cliente) => (
-                                    <option key={cliente.id}>{cliente.nome}</option>
+                                    <option key={cliente.id} value={cliente.id}>{cliente.nome}</option>
                                 ))}
                             </select>
                         </div>
@@ -111,53 +144,65 @@ export default function CadastrarPedidos() {
                             <span className="block text-sm font-medium text-gray-900">Produtos</span>
                             {
                                 produtos.map((produto) => (
-                                    <div className='grid grid-cols-2 items-center mb-2'>
-                                        <label htmlFor="produto" className="text-sm font-medium text-gray-900 mr-4" >
+                                    <div key={produto.id} className='grid grid-cols-2 items-center mb-2'>
+                                        <label htmlFor={`produto-${produto.id}`} className="text-sm font-medium text-gray-900 mr-4">
                                             <input
-                                                name='produto'
+                                                name={`produto_${produto.id}_checked`}
                                                 type='checkbox'
-                                                value={produto.nome}
-                                                id={produto.id}
+                                                id={`produto-${produto.id}`}
                                                 className='mr-2'
+                                                checked={dadosFormulario.idsProdutos.some(p => p.idProduto === produto.id)}
+                                                onChange={handleInput}
                                             />
                                             {produto.nome}
                                         </label>
-                                        <div className=''>
+                                        <div>
                                             <label className='w-28'>
                                                 <input
                                                     type='number'
                                                     min={0}
                                                     placeholder='Quantidade'
+                                                    name={`produto_${produto.id}_quantidade`}
                                                     className='shadow-sm bg-gray-50 border border-gray-300 
-                                                    text-gray-900 text-sm rounded-lg 
-                                                    focus:ring-primary-500 focus:border-primary-500 
-                                                    block  p-2.5'
+                                                        text-gray-900 text-sm rounded-lg 
+                                                        focus:ring-primary-500 focus:border-primary-500 
+                                                        block  p-2.5'
+                                                    value={
+                                                        dadosFormulario.idsProdutos.find(p => p.idProduto === produto.id)?.quantidade || 0
+                                                    }
+                                                    onChange={handleInput}
                                                 />
                                             </label>
                                         </div>
-
                                     </div>
                                 ))
                             }
                         </div>
 
                         <div className='ml-4 mt-4'>
-                            <DatePicker
+                            <input
+                                type='date'
+                                name='date'
                                 label='Data'
-                                value={dadosFormulario.data}
+                                value={dadosFormulario.date}
                                 onChange={handleInput}
                             />
                         </div>
                         <div className='ml-4 mt-4'>
-                            <input type="checkbox" id="pago" name="pago" className='mr-1' checked={dadosFormulario.pago} onChange={handleInput} />
-                            <label htmlFor="pago" className="text-sm font-medium text-gray-900" >Pago</label>
+                            <input
+                                type='checkbox'
+                                id="pago"
+                                name="pago"
+                                className='mr-1'
+                                checked={dadosFormulario.pago}
+                                onChange={handleInput}
+                            />
+                            <label htmlFor="pago" className="text-sm font-medium text-gray-900">Pago</label>
                         </div>
                     </div>
-                    <Buttons
-                        voltar={voltar}
-                    />
+                    <Buttons voltar={voltar} />
                 </form>
             </div>
         </section>
-    )
+    );
 }
