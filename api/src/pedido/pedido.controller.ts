@@ -19,8 +19,7 @@ export class PedidoController {
 
     @Post('salvar')
     async salvarPedido(@Body() pedido: any): Promise<ResultadoDto> {
-        console.log(pedido);
-        return this.pedidoService.salvarPedido(Pedido['data']);
+        return this.pedidoService.salvarPedido(pedido);
     }
 
     @Put('remover/:id')

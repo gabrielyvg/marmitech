@@ -36,22 +36,25 @@ export class PedidoService {
     } else {
       pedido = new Pedido();
     }
-    console.log(data.idsProdutos)
-    if (data.idsProdutos) {
-      data.idsProdutos.forEach(async produto => {   
-        pedido.idCliente = data.idCliente;
-        pedido.idProduto = produto.idProduto;
-        pedido.quantidade = produto.quantidade;
-        pedido.data = data.date;
-        pedido.nomeCliente = data.nomeCliente;
-        pedido.pago = data.pago ?? 0;
-        pedido.removido = data.removido ?? 0;
+    if (data.idsProdutos && Array.isArray(data.idsProdutos) && data.idsProdutos.length > 0) {
+      const resultados = [];
+  
+      for (const produto of data.idsProdutos) {
+        const pedidoAtual = new Pedido();
+        pedidoAtual.idCliente = data.idCliente;
+        pedidoAtual.idProduto = produto.idProduto;
+        pedidoAtual.quantidade = produto.quantidade;
+        pedidoAtual.data = data.date;
+        pedidoAtual.nomeCliente = data.nomeCliente;
+        pedidoAtual.pago = data.pago ?? 0;
+        pedidoAtual.removido = data.removido ?? 0;
+  
         try {
-          await this.pedidoRepository.save(pedido);
-          return {
+          await this.pedidoRepository.save(pedidoAtual);
+          resultados.push({
             status: true,
             mensagem: 'Pedido cadastrado com sucesso',
-          };
+          });
         } catch (error) {
           console.error('Error saving pedido:', error);
           return {
@@ -59,8 +62,12 @@ export class PedidoService {
             mensagem: `Houve um erro ao cadastrar o pedido. ${error.message}`,
           };
         }
-      });
-
+      }
+  
+      return {
+        status: true,
+        mensagem: 'Todos os pedidos foram cadastrados com sucesso',
+      };
     }
 
     return {
