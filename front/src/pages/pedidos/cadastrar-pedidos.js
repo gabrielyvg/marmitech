@@ -4,6 +4,7 @@ import { pedidoService } from '../../services/pedidoService';
 import { produtoService } from '../../services/produtoService';
 import { clienteService } from '../../services/clienteService';
 import Buttons from '../../components/Buttons';
+import { toast, ToastContainer } from 'react-nextjs-toast'
 
 export default function CadastrarPedidos() {
     const router = useRouter();
@@ -74,12 +75,20 @@ export default function CadastrarPedidos() {
             idsProdutos: dadosFormulario.idsProdutos,
             nomeCliente: dadosFormulario.nomeCliente
         };
-        console.log(data);
         try {
-            await pedidoService.salvar(data);
+            const result = await pedidoService.salvar(data);
+            console.log('result', result)
+            toast.notify(result.mensagem, {
+                title: 'Salvo!',
+                duration: 3,
+                type: "success"
+            })
         } catch (err) {
-            console.log(err);
-            // alert('Erro ao salvar');
+            console.error('Error saving pedido:', err);
+            return {
+                status: false,
+                mensagem: `Houve um erro ao cadastrar o pedido. ${err.message}`,
+            };
         }
     };
 
@@ -203,6 +212,7 @@ export default function CadastrarPedidos() {
                     <Buttons voltar={voltar} />
                 </form>
             </div>
+            <ToastContainer />
         </section>
     );
 }
