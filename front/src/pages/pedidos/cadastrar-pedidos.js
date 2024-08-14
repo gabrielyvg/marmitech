@@ -78,11 +78,13 @@ export default function CadastrarPedidos() {
         try {
             const result = await pedidoService.salvar(data);
             console.log('result', result)
-            toast.notify(result.mensagem, {
+            console.log('SALVOU')
+           /*  toast.notify(result.mensagem, {
                 title: 'Salvo!',
                 duration: 3,
                 type: "success"
-            })
+            }) */
+            voltar();
         } catch (err) {
             console.error('Error saving pedido:', err);
             return {

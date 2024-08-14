@@ -145,4 +145,27 @@ const tableProdutos = [
     }
 ]
 
-export default { menuOptions, marmitasTamanho, tableCliente, tableGastos, empresas, tiposProdutos, tableProdutos };
+const tablePedidos = [
+    {
+        id: 1,
+        nome: 'Cliente',
+    },
+    {
+        id: 2,
+        nome: 'Produto'
+    },
+    {
+        id: 3,
+        nome: 'Quantidade'
+    },
+    {
+        id: 4,
+        nome: 'Pago'
+    },
+    {
+        id: 5,
+        nome: 'Data'
+    }
+]
+
+export default { menuOptions, marmitasTamanho, tableCliente, tableGastos, empresas, tiposProdutos, tableProdutos, tablePedidos };
