@@ -1,7 +1,9 @@
+import { Pedido } from "src/pedido/pedido.entity";
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  ManyToMany,
 } from "typeorm";
 
 @Entity()
@@ -20,4 +22,7 @@ export class Produtos {
   
   @Column({ length: 1, default: "0" })
   removido: string;
+
+  @ManyToMany(() => Pedido, pedido => pedido.produto)
+  public pedido: Pedido[];
 }

@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Cliente } from 'src/cliente/cliente.entity';
+import { Produtos } from 'src/produtos/produtos.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class Pedido {
@@ -6,7 +8,7 @@ export class Pedido {
   id: number;
 
   @Column()
-  idCliente?: number;
+  idCliente: number;
 
   @Column()
   idProduto: number;
@@ -25,4 +27,12 @@ export class Pedido {
 
   @Column({ default: 0 })
   removido: number;
+
+  @ManyToOne(() => Cliente, cliente => cliente.pedido)
+  @JoinColumn({ name: 'idCliente' })
+  public cliente: Cliente;
+
+  @ManyToOne(() => Produtos, produto => produto.pedido)
+  @JoinColumn({ name: 'idProduto' })
+  public produto: Produtos;
 }

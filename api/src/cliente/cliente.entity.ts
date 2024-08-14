@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Pedido } from 'src/pedido/pedido.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Cliente {
@@ -45,4 +46,7 @@ export class Cliente {
 
   // @Column()
   // updated_by: number;
+
+  @OneToMany(() => Pedido, pedido => pedido.cliente)
+  public pedido: Pedido[];
 }
