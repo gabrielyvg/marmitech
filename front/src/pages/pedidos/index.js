@@ -1,66 +1,91 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { pedidoService } from '../../services/pedidoService';
-import mock from '../../utils/mock';
 import moment from 'moment';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { IconField } from 'primereact/iconfield';
+import { InputIcon } from 'primereact/inputicon';
 
 export default function Pedidos() {
     const router = useRouter();
-
     const [pedidos, setPedidos] = useState([]);
+    const [filters, setFilters] = useState(null);
+    const [globalFilterValue, setGlobalFilterValue] = useState('');
 
     useEffect(() => {
-        setTimeout(() => {
-            pedidoService.listar()
-                .then((response) => {
-                    setPedidos(response);
-                    /* setCarregando(false); */
-                })
-                .catch((error) => {
-                    console.error(error);
-                })
-        })
+        pedidoService.listar()
+            .then((response) => {
+                setPedidos(response);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }, []);
 
 
     const addPedido = () => {
         router.push('/pedidos/cadastrar-pedidos');
-    }
+    };
+
+    const clearFilter = () => {
+        initFilters();
+    };
+
+    const onGlobalFilterChange = (e) => {
+        const value = e.target.value;
+        let _filters = { ...filters };
+
+        _filters['global'].value = value;
+
+        setFilters(_filters);
+        setGlobalFilterValue(value);
+    };
+
+    const initFilters = () => {
+        setFilters({
+            global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+            'cliente.nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+            'produto.nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+            'quantidade': { value: null, matchMode: FilterMatchMode.IN },
+            'pago': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
+            'data': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] }
+        });
+        setGlobalFilterValue('');
+    };
+
+    const renderHeader = () => {
+        return (
+            <div className="flex justify-content-between">
+                <Button type="button" icon="pi pi-filter-slash" label="Limpar" outlined onClick={clearFilter} />
+                <IconField iconPosition="left">
+                    <InputIcon className="pi pi-search" />
+                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Pesquisa" />
+                </IconField>
+            </div>
+        );
+    };
+
+    const header = renderHeader();
     return (
-        <>
-            <section>
-                <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
-                    <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Listagem de pedidos</h2>
-                    <table className='table-auto border-separate sm:border-spacing-1 md:border-spacing-4 lg:border-spacing-6 border border-slate-300 rounded-lg'>
-                        <thead className='bg-slate-100 text-slate-600'>
-                            <tr>
-                                {mock.tablePedidos.map((column) => (
-                                    <th key={column.id} className='px-4 py-2 border-b border-slate-200'>{column.nome}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {pedidos.map((row) => (
-                                <tr key={row.id} className='text-center'>
-                                    <td className='px-4 py-2 border-b border-slate-200'>{row.cliente.nome}</td>
-                                    <td className='px-4 py-2 border-b border-slate-200'>{row.produto.nome}</td>
-                                    <td className='px-4 py-2 border-b border-slate-200'>{row.quantidade}</td>
-                                    <td className='px-4 py-2 border-b border-slate-200'>{row.pago === 1 ? 'SIM' : 'NÃO'}</td>
-                                    <td className='px-4 py-2 border-b border-slate-200'>{moment(row.data).format('DD/MM/YYYY')}</td>
-                                    {/* <td className='px-4 py-2 border-b border-slate-200'>
-                                        <ActionButtonsTable
-                                            nome={row.nome}
-                                            id={row.id}
-                                            editar={editarCliente}
-                                            openModal={openModal}
-                                        />
-                                    </td> */}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+        <section>
+            <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
+                <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Listagem de pedidos</h2>
+                <div className='overflow-x-auto'>
+                    <DataTable value={pedidos} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} removableSort
+                        filters={filters} globalFilterFields={['cliente.nome', 'produto.nome', 'quantidade', 'pago', 'data']} header={header}
+                        emptyMessage="No customers found." onFilter={(e) => setFilters(e.filters)} tableStyle={{ minWidth: '20rem' }}>
+                        <Column field="cliente.nome" header="Nome" sortable></Column>
+                        <Column field="produto.nome" header="Produto" sortable></Column>
+                        <Column field="quantidade" header="Quantidade" sortable></Column>
+                        <Column field="pago" header="Pago" sortable body={(rowData) => rowData.pago === 1 ? 'SIM' : 'NÃO'}></Column>
+                        <Column field="data" header="Data" sortable body={(rowData) => moment(rowData.data).format('DD/MM/YYYY')}></Column>
+                    </DataTable>
                 </div>
-            </section>
-        </>
-    )
+            </div>
+        </section>
+    );
 }
