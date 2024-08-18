@@ -5,6 +5,9 @@ import { produtoService } from '../../services/produtoService';
 import { clienteService } from '../../services/clienteService';
 import Buttons from '../../components/Buttons';
 import { toast, ToastContainer } from 'react-nextjs-toast'
+import { InputText } from 'primereact/inputtext';
+import { RadioButton } from 'primereact/radiobutton';
+import { Checkbox } from 'primereact/checkbox';
 
 export default function CadastrarPedidos() {
     const router = useRouter();
@@ -24,36 +27,50 @@ export default function CadastrarPedidos() {
         getProdutos();
     }, []);
 
-    const handleInput = (e) => {
-        const fieldName = e.target.name;
-        const fieldValue = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    const handleInput = (e, id = null, tipo = null) => {
+        // Verificar se o evento vem de um componente PrimeReact Checkbox
+        const isPrimeReactCheckbox = e.target === undefined && e.checked !== undefined;
+        // Verificar se o evento vem de um componente PrimeReact InputText ou outros inputs nativos
+        const isPrimeReactInput = e.target !== undefined && e.target.name !== undefined;
 
-        if (fieldName.includes('produto')) {
-            const [_, idProduto, tipo] = fieldName.split('_');
-            const id = parseInt(idProduto);
+        let fieldName, fieldValue;
 
-            if (tipo === 'checked') {
+        if (isPrimeReactCheckbox) {
+            fieldName = `produto_${id}_checked`;
+            fieldValue = e.checked;
+        } else if (isPrimeReactInput) {
+            fieldName = e.target.name;
+            fieldValue = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+        } else {
+            return;
+        }
+
+        if (fieldName && fieldName.includes('produto')) {
+            const [_, idProduto, tipoInput] = fieldName.split('_');
+            const produtoId = parseInt(idProduto);
+
+            if (tipoInput === 'checked') {
                 setDadosFormulario((prevState) => {
-                    const isSelected = prevState.idsProdutos.some(produto => produto.idProduto === id);
-                    if (e.target.checked) {
+                    const isSelected = prevState.idsProdutos.some(produto => produto.idProduto === produtoId);
+                    if (fieldValue) {  // If checkbox is checked
                         if (!isSelected) {
                             return {
                                 ...prevState,
-                                idsProdutos: [...prevState.idsProdutos, { idProduto: id, quantidade: 0 }]
+                                idsProdutos: [...prevState.idsProdutos, { idProduto: produtoId, quantidade: 0 }]
                             };
                         }
-                    } else {
+                    } else {  // If checkbox is unchecked
                         return {
                             ...prevState,
-                            idsProdutos: prevState.idsProdutos.filter(produto => produto.idProduto !== id)
+                            idsProdutos: prevState.idsProdutos.filter(produto => produto.idProduto !== produtoId)
                         };
                     }
                 });
-            } else if (tipo === 'quantidade') {
+            } else if (tipoInput === 'quantidade') {
                 setDadosFormulario((prevState) => ({
                     ...prevState,
                     idsProdutos: prevState.idsProdutos.map(produto =>
-                        produto.idProduto === id ? { ...produto, quantidade: Number(fieldValue) } : produto
+                        produto.idProduto === produtoId ? { ...produto, quantidade: Number(fieldValue) } : produto
                     )
                 }));
             }
@@ -64,6 +81,7 @@ export default function CadastrarPedidos() {
             }));
         }
     };
+
 
     const onSubmit = async (event) => {
         event.preventDefault();
@@ -79,11 +97,11 @@ export default function CadastrarPedidos() {
             const result = await pedidoService.salvar(data);
             console.log('result', result)
             console.log('SALVOU')
-           /*  toast.notify(result.mensagem, {
-                title: 'Salvo!',
-                duration: 3,
-                type: "success"
-            }) */
+            /*  toast.notify(result.mensagem, {
+                 title: 'Salvo!',
+                 duration: 3,
+                 type: "success"
+             }) */
             voltar();
         } catch (err) {
             console.error('Error saving pedido:', err);
@@ -155,36 +173,21 @@ export default function CadastrarPedidos() {
                             <span className="block text-sm font-medium text-gray-900">Produtos</span>
                             {
                                 produtos.map((produto) => (
-                                    <div key={produto.id} className='grid grid-cols-2 items-center mb-2'>
-                                        <label htmlFor={`produto-${produto.id}`} className="text-sm font-medium text-gray-900 mr-4">
-                                            <input
+                                    <div key={produto.id} className="p-inputgroup flex-1 mb-2">
+                                        <span className="p-inputgroup-addon">
+                                            <Checkbox
                                                 name={`produto_${produto.id}_checked`}
-                                                type='checkbox'
-                                                id={`produto-${produto.id}`}
-                                                className='mr-2'
                                                 checked={dadosFormulario.idsProdutos.some(p => p.idProduto === produto.id)}
-                                                onChange={handleInput}
+                                                onChange={(e) => handleInput(e, produto.id, 'checked')}
                                             />
-                                            {produto.nome}
-                                        </label>
-                                        <div>
-                                            <label className='w-28'>
-                                                <input
-                                                    type='number'
-                                                    min={0}
-                                                    placeholder='Quantidade'
-                                                    name={`produto_${produto.id}_quantidade`}
-                                                    className='shadow-sm bg-gray-50 border border-gray-300 
-                                                        text-gray-900 text-sm rounded-lg 
-                                                        focus:ring-primary-500 focus:border-primary-500 
-                                                        block  p-2.5'
-                                                    value={
-                                                        dadosFormulario.idsProdutos.find(p => p.idProduto === produto.id)?.quantidade || 0
-                                                    }
-                                                    onChange={handleInput}
-                                                />
-                                            </label>
-                                        </div>
+                                        </span>
+                                        <InputText
+                                            type='number'
+                                            min={0}
+                                            placeholder={produto.nome}
+                                            name={`produto_${produto.id}_quantidade`}
+                                            onChange={handleInput}
+                                        />
                                     </div>
                                 ))
                             }
