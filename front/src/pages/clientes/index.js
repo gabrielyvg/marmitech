@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { clienteService } from '../../services/clienteService';
 import { useRouter } from 'next/router';
-import mock from '@/utils/mock';
 import ActionButtonsTable from '../../components/ActionButtonsTable';
 import ModalComponent from '../../components/ModalComponent';
 import { toast, ToastContainer } from 'react-nextjs-toast'
+import { DataTable } from 'primereact/datatable';
+import { Button } from 'primereact/button';
+import { IconField } from 'primereact/iconfield';
+import { InputIcon } from 'primereact/inputicon';
+import { InputText } from 'primereact/inputtext';
+import { Column } from 'typeorm';
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
 
 export default function Clientes() {
     const router = useRouter();
@@ -12,6 +18,8 @@ export default function Clientes() {
     const [modalIsOpen, setIsOpen] = useState(false);
     const [nome, setNome] = useState();
     const [id, setId] = useState();
+    const [filters, setFilters] = useState(null);
+    const [globalFilterValue, setGlobalFilterValue] = useState('');
     /* const [carregando, setCarregando] = useState(true); */
 
     useEffect(() => {
@@ -71,6 +79,58 @@ export default function Clientes() {
         setId(id)
         setIsOpen(true);
     }
+    const actionBodyTemplate = (rowData) => {
+        return (
+            <React.Fragment>
+                <ActionButtonsTable
+                    nome={rowData.nome}
+                    id={rowData.id}
+                    editar={editarCliente}
+                    openModal={openModal}
+                />
+            </React.Fragment>
+        );
+    };
+
+    const clearFilter = () => {
+        initFilters();
+    };
+
+    const onGlobalFilterChange = (e) => {
+        const value = e.target.value;
+        let _filters = { ...filters };
+
+        _filters['global'].value = value;
+
+        setFilters(_filters);
+        setGlobalFilterValue(value);
+    };
+
+    const initFilters = () => {
+        setFilters({
+            global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+            'nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+            'telefone': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+            'paga_mensalmente': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
+            'paga_semanalmente': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
+            'nfe': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] }
+        });
+        setGlobalFilterValue('');
+    };
+
+    const renderHeader = () => {
+        return (
+            <div className="flex justify-content-between">
+                <Button type="button" icon="pi pi-filter-slash" label="Limpar" outlined onClick={clearFilter} />
+                <IconField iconPosition="left">
+                    <InputIcon className="pi pi-search" />
+                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Pesquisa" />
+                </IconField>
+            </div>
+        );
+    };
+
+    const header = renderHeader();
 
     return (
         <>
@@ -82,42 +142,19 @@ export default function Clientes() {
                     closeModal={closeModal}
                 />
                 <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
-                    <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Listagem de clientes</h2>
+                    <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Listagem de Clientes</h2>
                     <div className='overflow-x-auto'>
-                        <table className='table-auto w-full border-separate border-spacing-2 border border-slate-300 rounded-lg'>
-                            <thead className='bg-slate-100 text-slate-600'>
-                                <tr>
-                                    {mock.tableCliente.map((column) => (
-                                        <th key={column.id} className='px-4 py-2 border-b border-slate-200'>{column.nome}</th>
-                                    ))}
-                                </tr>
-                            </thead>
-                        </table>
-                        <div className='overflow-y-auto max-h-screen'>
-                            <table className='table-auto w-full border-separate border-spacing-2 border border-slate-300 rounded-lg'>
-                                <tbody>
-                                    {clientes.map((row) => (
-                                        <tr key={row.id} className='text-center'>
-                                            <td className='px-4 py-2 border-b border-slate-200'>{row.nome}</td>
-                                            <td className='px-4 py-2 border-b border-slate-200'>{row.telefone}</td>
-                                            <td className='px-4 py-2 border-b border-slate-200'>{row.paga_mensalmente === 1 ? 'SIM' : 'NÃO'}</td>
-                                            <td className='px-4 py-2 border-b border-slate-200'>{row.paga_semanalmente === 1 ? 'SIM' : 'NÃO'}</td>
-                                            <td className='px-4 py-2 border-b border-slate-200'>{row.nfe === '1' ? 'SIM' : 'NÃO'}</td>
-                                            <td className='px-4 py-2 border-b border-slate-200'>
-                                                <ActionButtonsTable
-                                                    nome={row.nome}
-                                                    id={row.id}
-                                                    editar={editarCliente}
-                                                    openModal={openModal}
-                                                />
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                        <DataTable value={clientes} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} removableSort
+                            filters={filters} globalFilterFields={['nome', 'telefone', 'paga_mensalmente', 'paga_semanalmente', 'nfe']} header={header}
+                            emptyMessage="Clientes não encontrados." onFilter={(e) => setFilters(e.filters)} tableStyle={{ minWidth: '20rem' }}>
+                            <Column field="nome" header="Nome" sortable></Column>
+                            {/* <Column field="telefone" header="Telefone" sortable></Column> */}
+                            <Column field="paga_mensalmente" header="Paga Mensalmente" sortable body={(rowData) => rowData.paga_mensalmente === 1 ? 'SIM' : 'NÃO'}></Column>
+                            <Column field="paga_semanalmente" header="Paga Semanalmente" sortable body={(rowData) => rowData.paga_semanalmente === 1 ? 'SIM' : 'NÃO'}></Column>
+                            <Column field="nfe" header="Nfe" sortable body={(rowData) => rowData.nfe === 1 ? 'SIM' : 'NÃO'}></Column>
+                            <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '10rem' }}></Column>
+                        </DataTable>
                     </div>
-
                 </div>
                 <ToastContainer />
             </section>
