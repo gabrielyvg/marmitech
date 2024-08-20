@@ -38,9 +38,7 @@ export default function Pedidos() {
 
     const onGlobalFilterChange = (e) => {
         const value = e.target.value;
-        console.log('a', filters)
         let _filters = { ...filters };
-        console.log('sad', _filters)
 
         if (_filters['global']) {
             _filters['global'].value = value;
