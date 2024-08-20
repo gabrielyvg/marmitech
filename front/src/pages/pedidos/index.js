@@ -24,6 +24,7 @@ export default function Pedidos() {
             .catch((error) => {
                 console.error(error);
             });
+            initFilters();
     }, []);
 
 
@@ -37,9 +38,13 @@ export default function Pedidos() {
 
     const onGlobalFilterChange = (e) => {
         const value = e.target.value;
+        console.log('a', filters)
         let _filters = { ...filters };
+        console.log('sad', _filters)
 
-        _filters['global'].value = value;
+        if (_filters['global']) {
+            _filters['global'].value = value;
+        }
 
         setFilters(_filters);
         setGlobalFilterValue(value);
