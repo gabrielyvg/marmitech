@@ -32,6 +32,7 @@ export default function Clientes() {
                 .catch((error) => {
                     console.error(error);
                 })
+                initFilters();
         })
     }, []);
 
