@@ -10,12 +10,18 @@ import { InputText } from 'primereact/inputtext';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { Tag } from 'primereact/tag';
+import ActionButtonsTable from '../../components/ActionButtonsTable';
+import ModalComponent from '../../components/ModalComponent';
 
 export default function Pedidos() {
     const router = useRouter();
     const [pedidos, setPedidos] = useState([]);
     const [filters, setFilters] = useState(null);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
+    const [nome, setNome] = useState();
+    const [id, setId] = useState();
+    const [modalIsOpen, setIsOpen] = useState(false);
+
     useEffect(() => {
         pedidoService.listar()
             .then((response) => {
@@ -82,8 +88,68 @@ export default function Pedidos() {
         return <Tag value={rowData.pago === 1 ? 'PAGO' : 'PENDENTE'} severity={isPaid(rowData.pago)}></Tag>;
     };
 
+    const actionBodyTemplate = (rowData) => {
+        return (
+            <React.Fragment>
+                <ActionButtonsTable
+                    nome={rowData.cliente.nome}
+                    id={rowData.id}
+                    editar={editarPedido}
+                    openModal={openModal}
+                />
+            </React.Fragment>
+        );
+    };
+
+    const editarPedido = (idPedido) => {
+        router.push(`/pedidos/cadastrar-pedidos/${idPedido}`);
+    }
+
+    const openModal = (nome, id) => {
+        setNome(nome);
+        setId(id)
+        setIsOpen(true);
+    }
+
+    const positiveAnswer = () => {
+        removerPedido(id);
+        setIsOpen(false);
+    };
+
+    const closeModal = () => {
+        setIsOpen(false);
+    };
+
+    const removerPedido = async (id) => {
+        try {
+            const result = await pedidoService.remover({
+                id: id,
+            });
+
+            toast.notify(result.mensagem, {
+                title: 'Removido com sucesso!',
+                duration: 3,
+                type: "success"
+            })
+        } catch (error) {
+            toast.notify(error.message, {
+                title: 'Erro!',
+                duration: 3,
+                type: "error"
+            })
+        } finally {
+            router.reload();
+        }
+    }
+
     return (
         <section>
+            <ModalComponent
+                nome={nome}
+                modalIsOpen={modalIsOpen}
+                positiveAnswer={positiveAnswer}
+                closeModal={closeModal}
+            />
             <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                 <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Listagem de pedidos</h2>
                 <div className='overflow-x-auto'>
@@ -99,6 +165,7 @@ export default function Pedidos() {
                         <Column field="quantidade" header="Quantidade" sortable></Column>
                         <Column field="data" header="Data" sortable body={(rowData) => moment(rowData.data).format('DD/MM/YYYY')}></Column>
                         <Column field="pago" header="Pago" sortable body={statusBodyTemplate}></Column>
+                        <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '10rem' }}></Column>
                     </DataTable>
                 </div>
             </div>

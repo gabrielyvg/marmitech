@@ -25,11 +25,19 @@ export default function CadastrarPedidos() {
     const [clientes, setClientes] = useState([]);
     const [selectedCliente, setCliente] = useState([]);
     const [produtos, setProdutos] = useState([]);
+    const idPedido = router.query.slug && router.query.slug[1] ? router.query.slug[1] : null;
 
     useEffect(() => {
         getCliente();
         getProdutos();
     }, []);
+
+    useEffect(() => {
+        if (idPedido) {
+            getPedidoById(idPedido)
+        }
+    }, [idPedido]);
+
 
     addLocale('pt-BR', {
         firstDayOfWeek: 1,
@@ -146,6 +154,19 @@ export default function CadastrarPedidos() {
             console.error(error);
         }
     };
+    
+    
+    const getPedidoById = async (idPedido) => {
+        const fetchedClienteData = await pedidoService.getById({
+            id: idPedido,
+        });
+        const updatedData = {
+            ...fetchedClienteData,
+            pago: fetchedClienteData.pago === 1 ? true : false
+        };
+
+        setDadosFormulario(updatedData);
+    }
 
     const voltar = () => {
         router.push('/pedidos/');
