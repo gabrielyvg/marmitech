@@ -9,13 +9,13 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
+import { Tag } from 'primereact/tag';
 
 export default function Pedidos() {
     const router = useRouter();
     const [pedidos, setPedidos] = useState([]);
     const [filters, setFilters] = useState(null);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
-
     useEffect(() => {
         pedidoService.listar()
             .then((response) => {
@@ -24,7 +24,7 @@ export default function Pedidos() {
             .catch((error) => {
                 console.error(error);
             });
-            initFilters();
+        initFilters();
     }, []);
 
 
@@ -73,19 +73,32 @@ export default function Pedidos() {
     };
 
     const header = renderHeader();
+
+    const isPaid = (value) => {
+        return value === 1 ? 'success' : 'danger';
+    };
+
+    const statusBodyTemplate = (rowData) => {
+        return <Tag value={rowData.pago === 1 ? 'PAGO' : 'PENDENTE'} severity={isPaid(rowData.pago)}></Tag>;
+    };
+
     return (
         <section>
             <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                 <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Listagem de pedidos</h2>
                 <div className='overflow-x-auto'>
-                    <DataTable value={pedidos} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} removableSort
+                    <DataTable value={pedidos} paginator rows={5}
+                        rowsPerPageOptions={[5, 10, 25, 50]}
+                        removableSort
                         filters={filters} globalFilterFields={['cliente.nome', 'produto.nome', 'quantidade', 'pago', 'data']} header={header}
-                        emptyMessage="No customers found." onFilter={(e) => setFilters(e.filters)} tableStyle={{ minWidth: '20rem' }}>
+                        emptyMessage="No customers found."
+                        onFilter={(e) => setFilters(e.filters)}
+                        tableStyle={{ minWidth: '20rem' }}>
                         <Column field="cliente.nome" header="Nome" sortable></Column>
                         <Column field="produto.nome" header="Produto" sortable></Column>
                         <Column field="quantidade" header="Quantidade" sortable></Column>
-                        <Column field="pago" header="Pago" sortable body={(rowData) => rowData.pago === 1 ? 'SIM' : 'NÃO'}></Column>
                         <Column field="data" header="Data" sortable body={(rowData) => moment(rowData.data).format('DD/MM/YYYY')}></Column>
+                        <Column field="pago" header="Pago" sortable body={statusBodyTemplate}></Column>
                     </DataTable>
                 </div>
             </div>
