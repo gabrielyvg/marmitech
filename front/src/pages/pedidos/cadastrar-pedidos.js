@@ -6,26 +6,42 @@ import { clienteService } from '../../services/clienteService';
 import Buttons from '../../components/Buttons';
 import { toast, ToastContainer } from 'react-nextjs-toast'
 import { InputText } from 'primereact/inputtext';
-import { RadioButton } from 'primereact/radiobutton';
 import { Checkbox } from 'primereact/checkbox';
+import { InputSwitch } from 'primereact/inputswitch';
+import { Calendar } from 'primereact/calendar';
+import { addLocale } from 'primereact/api';
+import { Dropdown } from 'primereact/dropdown';
+import { FloatLabel } from "primereact/floatlabel";
 
 export default function CadastrarPedidos() {
     const router = useRouter();
 
     const [dadosFormulario, setDadosFormulario] = useState({
-        idCliente: 0,
         pago: false,
         date: '',
         nomeCliente: '',
         idsProdutos: []
     });
     const [clientes, setClientes] = useState([]);
+    const [selectedCliente, setCliente] = useState([]);
     const [produtos, setProdutos] = useState([]);
 
     useEffect(() => {
         getCliente();
         getProdutos();
     }, []);
+
+    addLocale('pt-BR', {
+        firstDayOfWeek: 1,
+        showMonthAfterYear: true,
+        dayNames: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
+        dayNamesShort: ['dom', 'seg', 'ter', 'quar', 'quin', 'sex', 'sáb'],
+        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abreil', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        today: 'Hoje',
+        clear: 'Limpar'
+    });
 
     const handleInput = (e, id = null, tipo = null) => {
         // Verificar se o evento vem de um componente PrimeReact Checkbox
@@ -87,7 +103,7 @@ export default function CadastrarPedidos() {
         event.preventDefault();
 
         const data = {
-            idCliente: dadosFormulario.idCliente,
+            idCliente: selectedCliente,
             pago: dadosFormulario.pago ? 1 : 0,
             date: dadosFormulario.date,
             idsProdutos: dadosFormulario.idsProdutos,
@@ -140,78 +156,70 @@ export default function CadastrarPedidos() {
             <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                 <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Registrar pedido</h2>
                 <form onSubmit={onSubmit}>
-                    <div className='grid grid-cols-2'>
-                        <div className='mr-4'>
-                            <label htmlFor="nomeCliente" className="block mb-2 text-sm font-medium text-gray-900">Nome cliente</label>
-                            <input
-                                type="text"
-                                name="nomeCliente"
-                                placeholder='Nome'
-                                value={dadosFormulario.nomeCliente}
-                                onChange={handleInput}
-                                className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5'
-                            />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <FloatLabel>
+                                <InputText type="text" className="p-inputtext-md"
+                                    name="nomeCliente"
+                                    value={dadosFormulario.nomeCliente}
+                                    onChange={handleInput} />
+                                <label htmlFor={'nomeCliente'}>Nome</label>
+                            </FloatLabel>
                         </div>
 
-                        <div className='ml-4'>
-                            <label htmlFor="cliente" className="block mb-2 text-sm font-medium text-gray-900">Selecionar Cliente</label>
-                            <select
-                                id='cliente'
-                                name='idCliente'
-                                value={dadosFormulario.idCliente}
-                                onChange={handleInput}
-                                className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5'
-                            >
-                                <option value="">Selecione um cliente</option>
-                                {clientes.map((cliente) => (
-                                    <option key={cliente.id} value={cliente.id}>{cliente.nome}</option>
-                                ))}
-                            </select>
+                        <div>
+                            <Dropdown
+                                value={selectedCliente}
+                                onChange={(e) => setCliente(e.value)}
+                                options={clientes}
+                                optionLabel="nome"
+                                placeholder="Selecione um cliente"
+                                filter
+                                className="w-full md:w-14rem" />
                         </div>
-
-                        <div className='flex flex-col mt-2'>
-                            <span className="block text-sm font-medium text-gray-900">Produtos</span>
-                            {
-                                produtos.map((produto) => (
-                                    <div key={produto.id} className="p-inputgroup flex-1 mb-2">
-                                        <span className="p-inputgroup-addon">
-                                            <Checkbox
-                                                name={`produto_${produto.id}_checked`}
-                                                checked={dadosFormulario.idsProdutos.some(p => p.idProduto === produto.id)}
-                                                onChange={(e) => handleInput(e, produto.id, 'checked')}
-                                            />
-                                        </span>
-                                        <InputText
-                                            type='number'
-                                            min={0}
-                                            placeholder={produto.nome}
-                                            name={`produto_${produto.id}_quantidade`}
-                                            onChange={handleInput}
-                                        />
-                                    </div>
-                                ))
-                            }
-                        </div>
-
-                        <div className='ml-4 mt-4'>
-                            <input
-                                type='date'
+                        <div>
+                            <Calendar
                                 name='date'
-                                label='Data'
+                                placeholder='Data'
                                 value={dadosFormulario.date}
                                 onChange={handleInput}
-                            />
+                                dateFormat="dd/mm/yy"
+                                locale="pt-BR" />
                         </div>
-                        <div className='ml-4 mt-4'>
-                            <input
-                                type='checkbox'
-                                id="pago"
-                                name="pago"
-                                className='mr-1'
-                                checked={dadosFormulario.pago}
-                                onChange={handleInput}
-                            />
-                            <label htmlFor="pago" className="text-sm font-medium text-gray-900">Pago</label>
+
+                        <div className="flex items-center">
+                            <span htmlFor="pago" className="text-sm font-medium text-gray-900 mr-2">Pago</span>
+                            <InputSwitch id="pago" name="pago" checked={dadosFormulario.pago} onChange={handleInput} />
+                        </div>
+
+                        <div className="md:col-span-2">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {
+                                    produtos.map((produto) => (
+                                        <div key={produto.id} className="flex flex-col mb-2 mt-2">
+                                            <div className="flex items-center">
+                                                <span className="p-inputgroup-addon">
+                                                    <Checkbox
+                                                        name={`produto_${produto.id}_checked`}
+                                                        checked={dadosFormulario.idsProdutos.some(p => p.idProduto === produto.id)}
+                                                        onChange={(e) => handleInput(e, produto.id, 'checked')}
+                                                    />
+                                                </span>
+                                                <FloatLabel>
+                                                    <InputText
+                                                        type='number'
+                                                        min={0}
+                                                        name={`produto_${produto.id}_quantidade`}
+                                                        onChange={handleInput}
+                                                       /*  style={{ width: '100%' }} */
+                                                    />
+                                                <label htmlFor={`produto_${produto.id}_quantidade`} className="">{produto.nome}</label>
+                                                </FloatLabel>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                            </div>
                         </div>
                     </div>
                     <Buttons voltar={voltar} />
@@ -219,5 +227,6 @@ export default function CadastrarPedidos() {
             </div>
             <ToastContainer />
         </section>
+
     );
 }
