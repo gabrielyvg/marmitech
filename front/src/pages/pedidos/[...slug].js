@@ -76,14 +76,14 @@ export default function CadastrarPedidos() {
             if (tipoInput === 'checked') {
                 setDadosFormulario((prevState) => {
                     const isSelected = prevState.idsProdutos.some(produto => produto.idProduto === produtoId);
-                    if (fieldValue) {  // If checkbox is checked
+                    if (fieldValue) {
                         if (!isSelected) {
                             return {
                                 ...prevState,
                                 idsProdutos: [...prevState.idsProdutos, { idProduto: produtoId, quantidade: 0 }]
                             };
                         }
-                    } else {  // If checkbox is unchecked
+                    } else {
                         return {
                             ...prevState,
                             idsProdutos: prevState.idsProdutos.filter(produto => produto.idProduto !== produtoId)
@@ -164,7 +164,7 @@ export default function CadastrarPedidos() {
             ...fetchedClienteData,
             pago: fetchedClienteData.pago === 1 ? true : false
         };
-
+        console.log('updatedData', updatedData)
         setDadosFormulario(updatedData);
     }
 
@@ -222,7 +222,7 @@ export default function CadastrarPedidos() {
                                                 <span className="p-inputgroup-addon">
                                                     <Checkbox
                                                         name={`produto_${produto.id}_checked`}
-                                                        checked={dadosFormulario.idsProdutos.some(p => p.idProduto === produto.id)}
+                                                        checked={dadosFormulario.idsProdutos ? dadosFormulario.idsProdutos.some(p => p.idProduto === produto.id) : produto.idProduto}
                                                         onChange={(e) => handleInput(e, produto.id, 'checked')}
                                                     />
                                                 </span>

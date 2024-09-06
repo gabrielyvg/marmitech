@@ -35,7 +35,12 @@ const menuOptions = [
     {
         id: "financeiro",
         title: "Financeiro",
-        url: '/financeiro'
+        url: '/financeiro',
+        subitem: {
+            id: "cadastrar-produtos",
+            title: "Adicionar produtos",
+            url: '/produtos/cadastrar-produtos',
+        }
     },
 ]
 

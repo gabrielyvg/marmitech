@@ -1,67 +1,65 @@
-import Link from 'next/link';
+
+import React, { useState, useRef } from 'react';
 import mockObject from '../utils/mock';
-import React, { useState } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSortDown, faKitchenSet } from '@fortawesome/free-solid-svg-icons';
+import { Menu } from 'primereact/menu';
 
-export default function Menu() {
-    const [expandedMenuId, setExpandedMenuId] = useState(null);
-    const [menuCollapsed, setMenuCollapsed] = useState(false);
+export default function HeadlessDemo() {
+    const itemRenderer = (item) => (
+        <div className='p-menuitem-content'>
+            <a className="flex align-items-center p-menuitem-link">
+                <span className={item.icon} />
+                <span className="mx-2">{item.label}</span>
+            </a>
+        </div>
+    );
 
-    const handleTitleClick = (id) => {
-        setExpandedMenuId(id === expandedMenuId ? null : id);
+    const headerTemplate = () => (
+        <div className="flex flex-col items-center p-3 bg-white border-1 border-t-black">
+            <span className="font-bold text-xl mt-2">Marmitech</span>
+        </div>
+    );
+
+    const convertMenuOptions = (options) => {
+        return options.map(option => {
+            const items = [
+                option.url && {
+                    label: option.subtitle,
+                    icon: 'pi pi-bars',
+                    url: option.url,
+                    command: () => {
+                        console.log('Redirecionando para:', option.url); // Verifique o URL
+                        window.location.href = option.url;
+                    },
+                    template: null
+                },
+                option.subitem && {
+                    label: option.subitem.title,
+                    icon: 'pi pi-plus',
+                    url: option.subitem.url,
+                    command: () => {
+                        console.log('Redirecionando para:', option.subitem.url); // Verifique o URL
+                        window.location.href = option.subitem.url;
+                    },
+                    template: null
+                }
+            ].filter(Boolean);
+    
+            return {
+                label: option.title,
+                items,
+            };
+        });
     };
+    
 
-    const handleToggleMenu = () => {
-        setMenuCollapsed(!menuCollapsed);
-    };
+    const items = convertMenuOptions(mockObject.menuOptions);
 
     return (
         <>
-
-            {!menuCollapsed ? (
-                <aside className={`fixed top-0 left-0 w-64 h-full shadow-lg shadow-black`} aria-label="Sidenav">
-                    <button className="absolute top-0 right-0 p-4" onClick={handleToggleMenu}>
-                        {'<'}
-                    </button>
-                    <div className='mt-6 mb-2 flex items-center justify-center'>
-                        <FontAwesomeIcon className='mr-2' icon={faKitchenSet} />
-                        <a className='font-bold text-2xl' href='/home'>Marmitech</a>
-                    </div>
-                    <div className='border'>
-                        <ul>
-                            {mockObject.menuOptions.map((menu) => (
-                                <li key={menu.id}>
-                                    <div className="flex items-center justify-around cursor-pointer" onClick={() => handleTitleClick(menu.id)}>
-                                        <span className="p-4 mr-4" >
-                                            {menu.title}
-                                        </span>
-                                        <FontAwesomeIcon
-                                            icon={faSortDown}
-                                        />
-                                    </div>
-                                    {expandedMenuId === menu.id && (
-                                        <ul className='m-2 list-disc'>
-                                            <li className='mb-2'>
-                                                <Link className="p-4 ml-10" href={menu.url}>{menu.subtitle}</Link>
-                                            </li>
-                                            <li key={menu.subitem.id}>
-                                                <Link className="p-4 ml-10" href={menu.subitem.url}>{menu.subitem.title}</Link>
-                                            </li>
-                                        </ul>
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </aside>
-            ) : (
-                <aside className={`fixed top-0 left-0 w-10 h-full shadow-lg shadow-black`} aria-label="Sidenav">
-                    <button className="absolute top-0 right-0 p-4" onClick={handleToggleMenu}>
-                        =
-                    </button>
-                </aside>
-            )}
+            <div className="card">
+                {headerTemplate()}
+                <Menu model={items} className="md:w-15rem min-h-screen lg:static" />
+            </div>
         </>
-    );
+    )
 }
