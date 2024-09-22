@@ -49,7 +49,7 @@ export default function CadastrarPedidos() {
         monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
         today: 'Hoje',
         clear: 'Limpar'
-    }); 
+    });
 
     const handleInput = (e, id = null, tipo = null) => {
         const isPrimeReactCheckbox = e.target === undefined && e.checked !== undefined;
@@ -109,7 +109,7 @@ export default function CadastrarPedidos() {
         event.preventDefault();
 
         const data = {
-            id: idPedido ?? 0, 
+            id: idPedido ?? 0,
             idCliente: selectedCliente,
             pago: dadosFormulario.pago ? 1 : 0,
             date: dadosFormulario.date,
@@ -118,13 +118,11 @@ export default function CadastrarPedidos() {
         };
         try {
             const result = await pedidoService.salvar(data);
-            console.log('result', result)
-            console.log('SALVOU')
-            /*  toast.notify(result.mensagem, {
-                 title: 'Salvo!',
-                 duration: 3,
-                 type: "success"
-             }) */
+            if (result.status) {
+                console.log('SALVOU');
+            } else {
+                console.log('ERRO');
+            }
             voltar();
         } catch (err) {
             console.error('Error saving pedido:', err);
@@ -160,14 +158,14 @@ export default function CadastrarPedidos() {
             const fetchedClienteData = await pedidoService.getById({ id: idPedido });
 
             const produtosSelecionados = Array.isArray(fetchedClienteData.produtos)
-            ? fetchedClienteData.produtos.map((produto) => ({
-                idProduto: produto.idProduto,
-                quantidade: produto.quantidade
-            }))
-            : [{
-                idProduto: fetchedClienteData.idProduto,
-                quantidade: fetchedClienteData.quantidade
-            }];
+                ? fetchedClienteData.produtos.map((produto) => ({
+                    idProduto: produto.idProduto,
+                    quantidade: produto.quantidade
+                }))
+                : [{
+                    idProduto: fetchedClienteData.idProduto,
+                    quantidade: fetchedClienteData.quantidade
+                }];
 
             const updatedData = {
                 ...fetchedClienteData,
@@ -176,11 +174,8 @@ export default function CadastrarPedidos() {
                 date: new Date(fetchedClienteData.data),
                 nomeCliente: fetchedClienteData.nomeCliente || ''
             };
-            console.log('updatedData',updatedData)
             setCliente(fetchedClienteData.idCliente);
-            console.log('clientes',selectedCliente)
             setDadosFormulario(updatedData);
-            console.log('adosFormulario',dadosFormulario)
 
         } catch (err) {
             console.error('Erro ao buscar os dados do pedido:', err);
