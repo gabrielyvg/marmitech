@@ -12,6 +12,7 @@ import { InputIcon } from 'primereact/inputicon';
 import { Tag } from 'primereact/tag';
 import ActionButtonsTable from '../../components/ActionButtonsTable';
 import ModalComponent from '../../components/ModalComponent';
+import { Dropdown } from 'primereact/dropdown';
 
 export default function Pedidos() {
     const router = useRouter();
@@ -21,6 +22,7 @@ export default function Pedidos() {
     const [nome, setNome] = useState();
     const [id, setId] = useState();
     const [modalIsOpen, setIsOpen] = useState(false);
+    const [status] = useState(['PAGO', 'PENDENTE']);
 
     useEffect(() => {
         pedidoService.listar()
@@ -80,12 +82,29 @@ export default function Pedidos() {
 
     const header = renderHeader();
 
+    /* Filtros de status */
     const isPaid = (value) => {
-        return value === 1 ? 'success' : 'danger';
+        return value === 1 || value === 'PAGO' ? 'success' : 'danger';
     };
 
     const statusBodyTemplate = (rowData) => {
         return <Tag value={rowData.pago === 1 ? 'PAGO' : 'PENDENTE'} severity={isPaid(rowData.pago)}></Tag>;
+    };
+
+    const statusItemTemplate = (option) => {
+        return <Tag value={option} severity={isPaid(option)} />;
+    };
+
+    const pagoFilterTemplate = (options) => {
+        return (
+            <Dropdown value={options.value}
+                options={status}
+                onChange={(e) => options.filterApplyCallback(e.value == 'PAGO' ? 1 : 0)}
+                itemTemplate={statusItemTemplate}
+                placeholder="Status"
+                className="p-column-filter"
+                showClear style={{ minWidth: '12rem' }} />
+        );
     };
 
     const actionBodyTemplate = (rowData) => {
@@ -166,7 +185,7 @@ export default function Pedidos() {
                         <Column field="produto.nome" header="Produto" sortable></Column>
                         <Column field="quantidade" header="Quantidade" sortable></Column>
                         <Column field="data" header="Data" sortable body={(rowData) => moment(rowData.data).format('DD/MM/YYYY')}></Column>
-                        <Column field="pago" header="Pago" body={statusBodyTemplate}></Column>
+                        <Column field="pago" header="Pago" body={statusBodyTemplate} filter filterElement={pagoFilterTemplate}></Column>
                         <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '10rem' }}></Column>
                     </DataTable>
                 </div>
