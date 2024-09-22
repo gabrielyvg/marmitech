@@ -32,7 +32,7 @@ export default function Clientes() {
                 .catch((error) => {
                     console.error(error);
                 })
-                initFilters();
+            initFilters();
         })
     }, []);
 
@@ -146,7 +146,11 @@ export default function Clientes() {
                     <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Listagem de Clientes</h2>
                     <div className='overflow-x-auto'>
                         <DataTable value={clientes} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} removableSort
-                            filters={filters} globalFilterFields={['nome', 'telefone', 'paga_mensalmente', 'paga_semanalmente', 'nfe']} header={header}
+                            filters={filters}
+                            globalFilterFields={['nome', 'telefone', 'paga_mensalmente', 'paga_semanalmente', 'nfe']}
+                            header={header}
+                            scrollable
+                            scrollHeight="500px"
                             emptyMessage="Clientes não encontrados." onFilter={(e) => setFilters(e.filters)} tableStyle={{ minWidth: '20rem' }}>
                             <Column field="nome" header="Nome" sortable></Column>
                             {/* <Column field="telefone" header="Telefone" sortable></Column> */}

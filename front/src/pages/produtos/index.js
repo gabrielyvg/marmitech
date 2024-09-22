@@ -152,6 +152,8 @@ export default function Produtos() {
                         <DataTable value={produtos} paginator rows={5}
                             rowsPerPageOptions={[5, 10, 25, 50]}
                             removableSort
+                            scrollable
+                            scrollHeight="500px"
                             filters={filters} globalFilterFields={['nome', 'tipo', 'valor']} header={header}
                             emptyMessage="No customers found."
                             onFilter={(e) => setFilters(e.filters)}
