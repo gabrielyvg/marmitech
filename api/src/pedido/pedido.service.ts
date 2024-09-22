@@ -35,11 +35,10 @@ export class PedidoService {
           };
         }
       }
-
+      let pedidoAtual = pedido || new Pedido();
+      const pedidosParaSalvar = [];
       if (data.idsProdutos && Array.isArray(data.idsProdutos) && data.idsProdutos.length > 0) {
-        const pedidosParaSalvar = [];
         for (const produto of data.idsProdutos) {
-          const pedidoAtual = !pedido ? new Pedido() : pedido;
           pedidoAtual.idCliente = data.idCliente;
           pedidoAtual.idProduto = produto.idProduto;
           pedidoAtual.quantidade = produto.quantidade;
@@ -50,13 +49,15 @@ export class PedidoService {
 
           pedidosParaSalvar.push(pedidoAtual);
         }
-        await this.pedidoRepository.save(pedidosParaSalvar);
-
-        return {
-          status: true,
-          mensagem: 'Todos os pedidos foram cadastrados com sucesso',
-        };
+      } else {
+        pedidoAtual = data;
       }
+
+      await this.pedidoRepository.save(pedidosParaSalvar);
+      return {
+        status: true,
+        mensagem: 'Todos os pedidos foram cadastrados com sucesso',
+      };
     } catch (error) {
       console.error('Error saving pedido:', error);
       return {
