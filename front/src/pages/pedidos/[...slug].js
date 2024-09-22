@@ -23,7 +23,7 @@ export default function CadastrarPedidos() {
         idsProdutos: []
     });
     const [clientes, setClientes] = useState([]);
-    const [selectedCliente, setCliente] = useState([]);
+    const [selectedCliente, setCliente] = useState(null);
     const [produtos, setProdutos] = useState([]);
     const idPedido = router.query.slug && router.query.slug[1] ? router.query.slug[1] : null;
 
@@ -49,12 +49,10 @@ export default function CadastrarPedidos() {
         monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
         today: 'Hoje',
         clear: 'Limpar'
-    });
+    }); 
 
     const handleInput = (e, id = null, tipo = null) => {
-        // Verificar se o evento vem de um componente PrimeReact Checkbox
         const isPrimeReactCheckbox = e.target === undefined && e.checked !== undefined;
-        // Verificar se o evento vem de um componente PrimeReact InputText ou outros inputs nativos
         const isPrimeReactInput = e.target !== undefined && e.target.name !== undefined;
 
         let fieldName, fieldValue;
@@ -111,6 +109,7 @@ export default function CadastrarPedidos() {
         event.preventDefault();
 
         const data = {
+            id: idPedido ?? 0, 
             idCliente: selectedCliente,
             pago: dadosFormulario.pago ? 1 : 0,
             date: dadosFormulario.date,
@@ -154,19 +153,39 @@ export default function CadastrarPedidos() {
             console.error(error);
         }
     };
-    
-    
+
+
     const getPedidoById = async (idPedido) => {
-        const fetchedClienteData = await pedidoService.getById({
-            id: idPedido,
-        });
-        const updatedData = {
-            ...fetchedClienteData,
-            pago: fetchedClienteData.pago === 1 ? true : false
-        };
-        console.log('updatedData', updatedData)
-        setDadosFormulario(updatedData);
-    }
+        try {
+            const fetchedClienteData = await pedidoService.getById({ id: idPedido });
+
+            const produtosSelecionados = Array.isArray(fetchedClienteData.produtos)
+            ? fetchedClienteData.produtos.map((produto) => ({
+                idProduto: produto.idProduto,
+                quantidade: produto.quantidade
+            }))
+            : [{
+                idProduto: fetchedClienteData.idProduto,
+                quantidade: fetchedClienteData.quantidade
+            }];
+
+            const updatedData = {
+                ...fetchedClienteData,
+                idsProdutos: produtosSelecionados,
+                pago: fetchedClienteData.pago === 1 ? true : false,
+                date: new Date(fetchedClienteData.data),
+                nomeCliente: fetchedClienteData.nomeCliente || ''
+            };
+            console.log('updatedData',updatedData)
+            setCliente(fetchedClienteData.idCliente);
+            console.log('clientes',selectedCliente)
+            setDadosFormulario(updatedData);
+            console.log('adosFormulario',dadosFormulario)
+
+        } catch (err) {
+            console.error('Erro ao buscar os dados do pedido:', err);
+        }
+    };
 
     const voltar = () => {
         router.push('/pedidos/');
@@ -232,9 +251,9 @@ export default function CadastrarPedidos() {
                                                         min={0}
                                                         name={`produto_${produto.id}_quantidade`}
                                                         onChange={handleInput}
-                                                       /*  style={{ width: '100%' }} */
+                                                    /*  style={{ width: '100%' }} */
                                                     />
-                                                <label htmlFor={`produto_${produto.id}_quantidade`} className="">{produto.nome}</label>
+                                                    <label htmlFor={`produto_${produto.id}_quantidade`} className="">{produto.nome}</label>
                                                 </FloatLabel>
                                             </div>
                                         </div>
