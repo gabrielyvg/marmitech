@@ -178,7 +178,7 @@ export default function Pedidos() {
                         scrollable
                         scrollHeight="500px"
                         filters={filters} globalFilterFields={['cliente.nome', 'produto.nome', 'quantidade', 'data']} header={header}
-                        emptyMessage="No customers found."
+                        emptyMessage="Nenhum pedido encontrado."
                         onFilter={(e) => setFilters(e.filters)}
                         tableStyle={{ minWidth: '20rem' }}>
                         <Column field="cliente.nome" header="Nome" sortable></Column>
