@@ -60,7 +60,7 @@ export default function Pedidos() {
             'cliente.nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
             'produto.nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
             'quantidade': { value: null, matchMode: FilterMatchMode.IN },
-            'pago': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
+            'pago': { value: null, matchMode: FilterMatchMode.EQUALS },
             'data': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] }
         });
         setGlobalFilterValue('');
@@ -156,7 +156,9 @@ export default function Pedidos() {
                     <DataTable value={pedidos} paginator rows={5}
                         rowsPerPageOptions={[5, 10, 25, 50]}
                         removableSort
-                        filters={filters} globalFilterFields={['cliente.nome', 'produto.nome', 'quantidade', 'pago', 'data']} header={header}
+                        scrollable
+                        scrollHeight="500px"
+                        filters={filters} globalFilterFields={['cliente.nome', 'produto.nome', 'quantidade', 'data']} header={header}
                         emptyMessage="No customers found."
                         onFilter={(e) => setFilters(e.filters)}
                         tableStyle={{ minWidth: '20rem' }}>
@@ -164,7 +166,7 @@ export default function Pedidos() {
                         <Column field="produto.nome" header="Produto" sortable></Column>
                         <Column field="quantidade" header="Quantidade" sortable></Column>
                         <Column field="data" header="Data" sortable body={(rowData) => moment(rowData.data).format('DD/MM/YYYY')}></Column>
-                        <Column field="pago" header="Pago" sortable body={statusBodyTemplate}></Column>
+                        <Column field="pago" header="Pago" body={statusBodyTemplate}></Column>
                         <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '10rem' }}></Column>
                     </DataTable>
                 </div>
