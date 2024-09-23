@@ -113,3 +113,7 @@ table {
 .form input {
   border: 1px solid #bbbbbb!important;
 }
+
+.p-megamenu .p-submenu-header {
+  display: none!important;
+}

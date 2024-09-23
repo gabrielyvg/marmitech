@@ -1,17 +1,10 @@
 
 import React, { useState, useRef } from 'react';
 import mockObject from '../utils/mock';
-import { Menu } from 'primereact/menu';
+import { MegaMenu } from 'primereact/megamenu';
 
 export default function HeadlessDemo() {
-    const itemRenderer = (item) => (
-        <div className='p-menuitem-content'>
-            <a className="flex align-items-center p-menuitem-link">
-                <span className={item.icon} />
-                <span className="mx-2">{item.label}</span>
-            </a>
-        </div>
-    );
+    const menu = useRef(null);
 
     const headerTemplate = () => (
         <div className="flex flex-col items-center p-3 bg-white border-1 border-t-black">
@@ -21,29 +14,36 @@ export default function HeadlessDemo() {
 
     const convertMenuOptions = (options) => {
         return options.map(option => {
+
             const items = [
-                option.url && {
-                    label: option.subtitle,
-                    icon: 'pi pi-bars',
-                    url: option.url,
-                    command: () => {
-                        console.log('Redirecionando para:', option.url); // Verifique o URL
-                        window.location.href = option.url;
-                    },
-                    template: null
-                },
-                option.subitem && {
-                    label: option.subitem.title,
-                    icon: 'pi pi-plus',
-                    url: option.subitem.url,
-                    command: () => {
-                        console.log('Redirecionando para:', option.subitem.url); // Verifique o URL
-                        window.location.href = option.subitem.url;
-                    },
-                    template: null
+                {
+                    items: [
+                        
+                            option.url && {
+                                label: option.subtitle,
+                                icon: 'pi pi-bars',
+                                url: option.url,
+                                command: () => {
+                                    console.log('Redirecionando para:', option.url);
+                                    window.location.href = option.url;
+                                },
+                                template: null
+                            },
+                            option.subitem && {
+                                label: option.subitem.title,
+                                icon: 'pi pi-plus',
+                                url: option.subitem.url,
+                                command: () => {
+                                    console.log('Redirecionando para:', option.subitem.url);
+                                    window.location.href = option.subitem.url;
+                                },
+                                template: null
+                            }
+                        
+                    ]
                 }
-            ].filter(Boolean);
-    
+            ]     
+            
             return {
                 label: option.title,
                 items,
@@ -58,7 +58,7 @@ export default function HeadlessDemo() {
         <>
             <div className="card">
                 {headerTemplate()}
-                <Menu model={items} className="md:w-15rem min-h-screen lg:static" />
+                <MegaMenu model={items} ref={menu} orientation="vertical" breakpoint="960px" className="md:w-15rem min-h-screen lg:static" />
             </div>
         </>
     )
