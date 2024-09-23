@@ -2,25 +2,28 @@ import mockObj from '@/utils/mock';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from "react";
 import { produtoService } from '../../services/produtoService';
-import CurrencyInput from 'react-currency-input-field';
 import { toast, ToastContainer } from 'react-nextjs-toast'
 import Buttons from '../../components/Buttons';
+import { FloatLabel } from 'primereact/floatlabel';
+import { InputText } from 'primereact/inputtext';
+import { Dropdown } from 'primereact/dropdown';
+import { InputNumber } from 'primereact/inputnumber';
 
 export default function CadastrarProdutos() {
   const router = useRouter();
   const idProduto = router.query.slug && router.query.slug[1] ? router.query.slug[1] : null;
-
+  const [selectedProduto, setProduto] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [dadosFormulario, setDadosFormulario] = useState({
     nome: '',
-    tipo: 'Marmita',
+    tipo: '',
     valor: ''
   });
 
   const limparDadosDoFormulario = () => {
     setDadosFormulario({
       nome: '',
-      tipo: 'Marmita',
+      tipo: '',
       valor: ''
     });
   };
@@ -48,14 +51,10 @@ export default function CadastrarProdutos() {
     }));
   }
 
-  const validateValue = (value) => {
-    if (value) {
-      dadosFormulario.valor = value.replace(/[^0-9]/g, '')
-    }
-  }
-
   const onSubmit = async (event) => {
     event.preventDefault();
+    dadosFormulario.tipo = selectedProduto.nome;
+    dadosFormulario.valor = dadosFormulario.valor * 100;
     setIsLoading(true);
 
     try {
@@ -92,52 +91,38 @@ export default function CadastrarProdutos() {
         <form onSubmit={onSubmit}>
           <div className='grid grid-cols-2'>
             <div className='mr-4'>
-              <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-900">Nome produto</label>
-              <input type="text"
-                name="nome"
-                placeholder='Nome'
-                value={dadosFormulario.nome || ''}
-                onChange={handleInput}
-                className='shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
-                  text-sm rounded-lg focus:ring-primary-500 
-                  focus:border-primary-500 block w-full p-2.5'
-                required
-              />
+              <FloatLabel>
+                <InputText type="text" className="p-inputtext-md"
+                  name="nome"
+                  value={dadosFormulario.nome}
+                  onChange={handleInput} />
+                <label htmlFor={'nome'}>Nome</label>
+              </FloatLabel>
             </div>
             <div className='ml-4'>
-              <label htmlFor="tipo" className="block mb-2 text-sm font-medium text-gray-900">Tipo de produto</label>
-              <select id='tipo' name='tipo'
-                value={dadosFormulario.tipo}
-                onChange={handleInput}
-                className='shadow-sm bg-gray-50 border
-                  border-gray-300 text-gray-900 text-sm rounded-lg 
-                  focus:ring-primary-500 focus:border-primary-500 
-                  block w-full p-2.5'
-              >
-                {mockObj.tiposProdutos.map((tipo) => (
-                  <option key={tipo.id}>{tipo.nome}</option>
-                ))}
-              </select>
+              <Dropdown
+                onChange={(e) => setProduto(e.value)}
+                options={mockObj.tiposProdutos}
+                value={selectedProduto}
+                optionLabel="nome"
+                placeholder="Selecione um produto"
+                className="w-full md:w-14rem" />
             </div>
             <div className='mr-4 mt-4'>
-              <label htmlFor="valor" className="block mb-2 text-sm font-medium text-gray-900">Valor do produto</label>
-              <CurrencyInput
-                intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
-                name="valor"
-                placeholder="R$"
-                decimalsLimit={2}
-                decimalSeparator=","
-                onValueChange={validateValue}
-                className='shadow-sm bg-gray-50 border border-gray-300
-                 text-gray-900 text-sm rounded-lg 
-                  focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5'
-                required
-              />
+              <InputNumber 
+                inputId="currency-br" 
+                value={dadosFormulario.valor} 
+                onValueChange={handleInput} 
+                mode="currency" 
+                currency="BRL"
+                placeholder='R$'
+                name='valor'
+                locale="pt-BR" />
             </div>
           </div>
-          <Buttons 
-           voltar={voltar}
-           isLoading={isLoading}
+          <Buttons
+            voltar={voltar}
+            isLoading={isLoading}
           />
         </form>
       </div>
