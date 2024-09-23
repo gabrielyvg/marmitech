@@ -8,7 +8,7 @@ export default function HeadlessDemo() {
 
     const headerTemplate = () => (
         <div className="flex flex-col items-center p-3 bg-white border-1 border-t-black">
-            <span className="font-bold text-xl mt-2">Marmitech</span>
+            <a href='/home' className="font-bold text-xl mt-2">Marmitech</a>
         </div>
     );
 
