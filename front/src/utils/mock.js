@@ -35,11 +35,23 @@ const menuOptions = [
     {
         id: "financeiro",
         title: "Financeiro",
-        url: '/financeiro',
+        subtitle: 'Relatórios',
+        url: '/financeiro/relatorios',
         subitem: {
             id: "cadastrar-produtos",
             title: "Adicionar produtos",
             url: '/produtos/cadastrar-produtos',
+        }
+    },
+    {
+        id: "instituicao",
+        title: "Instituição",
+        subtitle: 'Listar Instituição',
+        url: '/instituicao',
+        subitem: {
+            id: "cadastrar-instituicao",
+            title: "Adicionar Instituição",
+            url: '/instituicao/cadastrar-instituicao',
         }
     },
 ]
