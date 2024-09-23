@@ -24,7 +24,7 @@ export default function App({ Component, pageProps }) {
                             <Menu />
                         </div>
                     )}
-                    <div className="flex-1 p-4">
+                    <div className="flex-1">
                         <Component {...pageProps} />
                     </div>
                 </div>
