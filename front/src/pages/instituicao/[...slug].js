@@ -4,7 +4,7 @@ import { instituicaoService } from "../../services/instituicaoService";
 import { Dropdown } from "primereact/dropdown";
 import mock from '@/utils/mock';
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Buttons from "../../components/Buttons";
 
 export default function CadastrarInstituicao() {
@@ -17,6 +17,20 @@ export default function CadastrarInstituicao() {
     cnpj: '',
     tipoInstituicao: ''
   });
+
+  useEffect(() => {
+    if (idInstituicao) {
+      getInstituicaoById(idInstituicao)
+    }
+  }, [idInstituicao]);
+
+  const getInstituicaoById = async (idInstituicao) => {
+    const fetchedInstituicaoData = await instituicaoService.getById({
+      id: idInstituicao,
+    });
+
+    setDadosFormulario(fetchedInstituicaoData);
+  }
 
   const handleInput = (e) => {
     const fieldName = e.target.name;
@@ -50,7 +64,7 @@ export default function CadastrarInstituicao() {
       voltar();
     }
   }
-  console.log('mock.tipoInstituicao', mock.tipoInstituicao);
+
   return (
     <>
       <section className="flex justify-center">
