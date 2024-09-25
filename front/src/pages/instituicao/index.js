@@ -1,5 +1,5 @@
 import { DataTable } from "primereact/datatable";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Column } from "typeorm";
 import { instituicaoService } from "../../services/instituicaoService";
 import ActionButtonsTable from "../../components/ActionButtonsTable";
@@ -15,7 +15,7 @@ export default function Instituicao() {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     'nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
   });
-
+  const toast = useRef(null);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [nome, setNome] = useState();
   const [id, setId] = useState();
