@@ -13,12 +13,19 @@ import { Tag } from 'primereact/tag';
 import ActionButtonsTable from '../../components/ActionButtonsTable';
 import ModalComponent from '../../components/ModalComponent';
 import { Dropdown } from 'primereact/dropdown';
+import HeaderTable from '../../components/HeaderTable';
 
 export default function Pedidos() {
     const router = useRouter();
     const [pedidos, setPedidos] = useState([]);
-    const [filters, setFilters] = useState(null);
-    const [globalFilterValue, setGlobalFilterValue] = useState('');
+    const [filters, setFilters] = useState({
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        'cliente.nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+        'produto.nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+        'quantidade': { value: null, matchMode: FilterMatchMode.IN },
+        'pago': { value: null, matchMode: FilterMatchMode.EQUALS },
+        'data': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] }
+    });
     const [nome, setNome] = useState();
     const [id, setId] = useState();
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -32,55 +39,12 @@ export default function Pedidos() {
             .catch((error) => {
                 console.error(error);
             });
-        initFilters();
     }, []);
 
 
     const addPedido = () => {
         router.push('/pedidos/cadastrar-pedidos');
     };
-
-    const clearFilter = () => {
-        initFilters();
-    };
-
-    const onGlobalFilterChange = (e) => {
-        const value = e.target.value;
-        let _filters = { ...filters };
-
-        if (_filters['global']) {
-            _filters['global'].value = value;
-        }
-
-        setFilters(_filters);
-        setGlobalFilterValue(value);
-    };
-
-    const initFilters = () => {
-        setFilters({
-            global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-            'cliente.nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-            'produto.nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-            'quantidade': { value: null, matchMode: FilterMatchMode.IN },
-            'pago': { value: null, matchMode: FilterMatchMode.EQUALS },
-            'data': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] }
-        });
-        setGlobalFilterValue('');
-    };
-
-    const renderHeader = () => {
-        return (
-            <div className="flex justify-content-between">
-                <Button type="button" icon="pi pi-filter-slash" label="Limpar" outlined onClick={clearFilter} />
-                <IconField iconPosition="left">
-                    <InputIcon className="pi pi-search" />
-                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Pesquisa" />
-                </IconField>
-            </div>
-        );
-    };
-
-    const header = renderHeader();
 
     /* Filtros de status */
     const isPaid = (value) => {
@@ -160,6 +124,14 @@ export default function Pedidos() {
             router.reload();
         }
     }
+
+    const renderHeader = () => {
+        return (
+          <HeaderTable filtros={filters} onFilterChange={setFilters} />
+        );
+      }
+    
+      const header = renderHeader();
 
     return (
         <section>
