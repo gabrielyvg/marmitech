@@ -90,7 +90,7 @@ export default function CadastrarInstituicao() {
                   <label htmlFor={'cnpj'}>Cnpj</label>
                 </FloatLabel>
               </div>
-              <div>
+              <div className="mt-4">
                 <Dropdown
                   options={mock.tipoInstituicao}
                   value={selectedTipoInstituicao}
