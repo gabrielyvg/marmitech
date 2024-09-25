@@ -25,6 +25,6 @@ export class InstituicaoController {
 
     @Put('remover/:id')
     async removeInstituicao(@Param('id') id): Promise<ResultadoDto> {
-        return this.instituicaoService.removeInstituicao(id);
+        return this.instituicaoService.removeInstituicao(JSON.parse(id).id);
     }
 }

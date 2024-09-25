@@ -65,8 +65,7 @@ export class InstituicaoService {
   }
 
   async removeInstituicao(id: number): Promise<ResultadoDto> {
-    const instituicao = await this.getInstituicaoById(id)
-
+    const instituicao = await this.getInstituicaoById(id);
     if (instituicao.removido === 0) {
       instituicao.removido = 1;
     }
