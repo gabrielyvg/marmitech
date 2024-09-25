@@ -5,10 +5,6 @@ import ActionButtonsTable from '../../components/ActionButtonsTable';
 import ModalComponent from '../../components/ModalComponent';
 import { toast, ToastContainer } from 'react-nextjs-toast'
 import { DataTable } from 'primereact/datatable';
-import { Button } from 'primereact/button';
-import { IconField } from 'primereact/iconfield';
-import { InputIcon } from 'primereact/inputicon';
-import { InputText } from 'primereact/inputtext';
 import { Column } from 'typeorm';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import HeaderTable from '../../components/HeaderTable';
