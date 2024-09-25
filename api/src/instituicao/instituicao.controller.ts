@@ -20,7 +20,7 @@ export class InstituicaoController {
 
     @Post('salvar')
     async salvarInstituicao(@Body() instituicao: InstituicaoSalvarDto): Promise<ResultadoDto> {
-        return this.instituicaoService.salvarInstituicao(instituicao);
+        return this.instituicaoService.salvarInstituicao(instituicao['data']);
     }
 
     @Put('remover/:id')
