@@ -1,4 +1,4 @@
-export const pedidoService = {
+export const instituicaoService = {
   async listar() {
       const response = await fetch('http://localhost:3001/instituicao/listar', {
           method: 'GET',
