@@ -11,6 +11,7 @@ import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { Column } from 'typeorm';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import HeaderTable from '../../components/HeaderTable';
 
 export default function Clientes() {
     const router = useRouter();
@@ -18,8 +19,14 @@ export default function Clientes() {
     const [modalIsOpen, setIsOpen] = useState(false);
     const [nome, setNome] = useState();
     const [id, setId] = useState();
-    const [filters, setFilters] = useState(null);
-    const [globalFilterValue, setGlobalFilterValue] = useState('');
+    const [filters, setFilters] = useState({
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        'nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+        'telefone': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+        'paga_mensalmente': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
+        'paga_semanalmente': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
+        'nfe': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] }
+    });
     /* const [carregando, setCarregando] = useState(true); */
 
     useEffect(() => {
@@ -32,7 +39,6 @@ export default function Clientes() {
                 .catch((error) => {
                     console.error(error);
                 })
-            initFilters();
         })
     }, []);
 
@@ -93,46 +99,13 @@ export default function Clientes() {
         );
     };
 
-    const clearFilter = () => {
-        initFilters();
-    };
-
-    const onGlobalFilterChange = (e) => {
-        const value = e.target.value;
-        let _filters = { ...filters };
-
-        _filters['global'].value = value;
-
-        setFilters(_filters);
-        setGlobalFilterValue(value);
-    };
-
-    const initFilters = () => {
-        setFilters({
-            global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-            'nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-            'telefone': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-            'paga_mensalmente': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
-            'paga_semanalmente': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
-            'nfe': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] }
-        });
-        setGlobalFilterValue('');
-    };
-
     const renderHeader = () => {
         return (
-            <div className="flex justify-content-between">
-                <Button type="button" icon="pi pi-filter-slash" label="Limpar" outlined onClick={clearFilter} />
-                <IconField iconPosition="left">
-                    <InputIcon className="pi pi-search" />
-                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Pesquisa" />
-                </IconField>
-            </div>
+            <HeaderTable filtros={filters} onFilterChange={setFilters} />
         );
-    };
+    }
 
     const header = renderHeader();
-
     return (
         <>
             <section>
