@@ -185,4 +185,15 @@ const tablePedidos = [
     }
 ]
 
-export default { menuOptions, marmitasTamanho, tableCliente, tableGastos, empresas, tiposProdutos, tableProdutos, tablePedidos };
+const tipoInstituicao = [
+    {
+        id: 1,
+        nome: 'Restaurante'
+    },
+    {
+        id: 2,
+        nome: 'Lava-car'
+    }
+]
+
+export default { menuOptions, marmitasTamanho, tableCliente, tableGastos, empresas, tiposProdutos, tableProdutos, tablePedidos, tipoInstituicao };
