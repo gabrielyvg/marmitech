@@ -6,11 +6,8 @@ import ModalComponent from '../../components/ModalComponent';
 import ActionButtonsTable from '../../components/ActionButtonsTable';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
-import { IconField } from 'primereact/iconfield';
-import { InputIcon } from 'primereact/inputicon';
-import { InputText } from 'primereact/inputtext';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import HeaderTable from '../../components/HeaderTable';
 
 export default function Produtos() {
     const router = useRouter();
@@ -19,8 +16,12 @@ export default function Produtos() {
     const [modalIsOpen, setIsOpen] = useState(false);
     const [nome, setNome] = useState();
     const [id, setId] = useState();
-    const [globalFilterValue, setGlobalFilterValue] = useState('');
-    const [filters, setFilters] = useState(null);
+    const [filters, setFilters] = useState({
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        'nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+        'tipo': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+        'valor': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+    });
 
     useEffect(() => {
         setTimeout(() => {
@@ -31,7 +32,6 @@ export default function Produtos() {
                 .catch((error) => {
                     console.error(error);
                 })
-            initFilters();
         })
     }, []);
 
@@ -76,32 +76,6 @@ export default function Produtos() {
         setIsOpen(true);
     }
 
-    const clearFilter = () => {
-        initFilters();
-    };
-
-    const onGlobalFilterChange = (e) => {
-        const value = e.target.value;
-        let _filters = { ...filters };
-
-        if (_filters['global']) {
-            _filters['global'].value = value;
-        }
-
-        setFilters(_filters);
-        setGlobalFilterValue(value);
-    };
-
-    const initFilters = () => {
-        setFilters({
-            global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-            'nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-            'tipo': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-            'valor': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-        });
-        setGlobalFilterValue('');
-    };
-
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
@@ -115,26 +89,20 @@ export default function Produtos() {
         );
     };
 
-    const renderHeader = () => {
-        return (
-            <div className="flex justify-content-between">
-                <Button type="button" icon="pi pi-filter-slash" label="Limpar" outlined onClick={clearFilter} />
-                <IconField iconPosition="left">
-                    <InputIcon className="pi pi-search" />
-                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Pesquisa" />
-                </IconField>
-            </div>
-        );
-    };
-
-    const header = renderHeader();
-
     const valorBodyTemplate = (rowData) => {
         return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL'
         }).format(rowData.valor / 100);
     };
+
+    const renderHeader = () => {
+        return (
+            <HeaderTable filtros={filters} onFilterChange={setFilters} />
+        );
+    }
+
+    const header = renderHeader();
 
     return (
         <>
