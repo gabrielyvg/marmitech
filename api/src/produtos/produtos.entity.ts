@@ -23,6 +23,9 @@ export class Produtos {
   @Column({ length: 1, default: "0" })
   removido: string;
 
+  @Column()
+  idInstituicao: number;
+
   @ManyToMany(() => Pedido, pedido => pedido.produto)
   public pedido: Pedido[];
 }

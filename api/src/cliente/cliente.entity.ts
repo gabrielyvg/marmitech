@@ -35,6 +35,9 @@ export class Cliente {
     
   @Column({ default: 0 })
   paga_semanalmente: number;
+
+  @Column()
+  idInstituicao: number;
   // @CreateDateColumn()
   // created_at: Date;
 

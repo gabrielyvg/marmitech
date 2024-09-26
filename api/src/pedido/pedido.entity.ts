@@ -28,6 +28,9 @@ export class Pedido {
   @Column({ default: 0 })
   removido: number;
 
+  @Column()
+  idInstituicao: number;
+
   @ManyToOne(() => Cliente, cliente => cliente.pedido)
   @JoinColumn({ name: 'idCliente' })
   public cliente: Cliente;

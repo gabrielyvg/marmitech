@@ -10,6 +10,7 @@ export interface ClienteSalvarDto {
     paga_semanalmente?: number;
     nfe?: string;
     removido?: number;
+    idInstituicao?: number;
     // created_at?: Date;
     // updated_at?: Date;
     // created_by?: number;

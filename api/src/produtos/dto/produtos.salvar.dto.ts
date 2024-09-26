@@ -3,4 +3,5 @@ export interface ProdutosSalvarDto {
   nome: string;
   tipo: string;
   valor: string;
+  idInstituicao: number;
 }

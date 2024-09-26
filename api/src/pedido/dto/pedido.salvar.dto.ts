@@ -7,4 +7,5 @@ export interface PedidoSalvarDto {
   removido: number;
   nomeCliente: string;
   quantidade: number;
+  idInstituicao?: number;
 }
