@@ -14,6 +14,7 @@ export class PedidoService {
       .leftJoinAndSelect('pedido.cliente', 'cliente')
       .leftJoinAndSelect('pedido.produto', 'produto')
       .where('pedido.removido = :removido', { removido: 0 })
+      .orderBy('pedido.data', 'DESC')
       .getMany();
     console.log('pedidos', pedidos)
     return pedidos;
