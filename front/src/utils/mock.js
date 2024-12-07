@@ -54,6 +54,17 @@ const menuOptions = [
             url: '/instituicao/cadastrar-instituicao',
         }
     },
+    {
+        id: "usuario",
+        title: "Usuários",
+        subtitle: 'Listar Usuário',
+        url: '/usuario',
+        subitem: {
+            id: "cadastrar-usuario",
+            title: "Adicionar Usuário",
+            url: '/usuario/cadastrar-usuario',
+        }
+    },
 ]
 
 const marmitasTamanho = [
@@ -196,4 +207,15 @@ const tipoInstituicao = [
     }
 ]
 
-export default { menuOptions, marmitasTamanho, tableCliente, tableGastos, empresas, tiposProdutos, tableProdutos, tablePedidos, tipoInstituicao };
+const tipoUsuario = [
+    {
+        id: 1,
+        nome: 'Administrador'
+    },
+    {
+        id: 2,
+        nome: 'Financeiro'
+    }
+]
+
+export default { menuOptions, marmitasTamanho, tableCliente, tableGastos, empresas, tiposProdutos, tableProdutos, tablePedidos, tipoInstituicao, tipoUsuario };
