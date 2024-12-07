@@ -15,14 +15,14 @@ export default function CadastrarUsuario() {
   const [selectedTipoUsuario, setTipoUsuario] = useState(null);
   const [dadosFormulario, setDadosFormulario] = useState({
     nome: '',
-    tipo: '',
+    tipoUsuario: '',
     telefone: ''
   });
 
   const limparDadosDoFormulario = () => {
     setDadosFormulario({
       nome: '',
-      tipo: '',
+      tipoUsuario: '',
       telefone: ''
     });
   };
@@ -52,6 +52,7 @@ export default function CadastrarUsuario() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    dadosFormulario.tipoUsuario = selectedTipoUsuario.id;
     setIsLoading(true);
 
     try {
@@ -107,11 +108,17 @@ export default function CadastrarUsuario() {
             </div>
             <div className='mr-4 mt-4'>
               <FloatLabel>
-                <InputMask id="phone" 
+                <InputMask 
+                  id="telefone"
+                  name="telefone"
+                  type="text"
                   mask="(99) 99999-9999"
-                  placeholder="(99) 99999-9999">
+                  placeholder="(99) 99999-9999"
+                  value={dadosFormulario.telefone}
+                  onChange={handleInput}  
+                >
                 </InputMask>
-                <label htmlFor="phone">Telefone</label>
+                <label htmlFor="telefone">Telefone</label>
               </FloatLabel>
             </div>
           </div>
