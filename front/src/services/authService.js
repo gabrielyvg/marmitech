@@ -2,13 +2,15 @@ import { HttpClient } from '../utils/HttpClient';
 import { tokenService } from './tokenService';
 
 export const authService = {
-    async login({ username, password }) {
-        return HttpClient(`${process.env.BACKEND_URL}/api/login`, {
+    async login({ email, password }) {
+        return HttpClient(`${process.env.BACKEND_URL}/login`, {
             method: 'POST',
-            body: { username, password }
+            body: { email, password }
         })
             .then(async (respostaDoServidor) => {
-                if (!respostaDoServidor.ok) throw new Error('Usuário ou senha inválidos!')
+                if (!respostaDoServidor.ok) {
+                    throw new Error('Usuário ou senha inválidos!');
+                }
                 const body = respostaDoServidor.body;
 
                 tokenService.save(body.data.access_token);
@@ -18,7 +20,7 @@ export const authService = {
             .then(async ({ data }) => {
                 const { refresh_token } = data;
 
-                const response = await HttpClient('/api/refresh', {
+                const response = await HttpClient('/refresh', {
                     method: 'POST',
                     body: {
                         refresh_token
@@ -31,7 +33,7 @@ export const authService = {
     async getSession(ctx = null) {
         const token = tokenService.get(ctx);
 
-        return HttpClient(`${process.env.BACKEND_URL}/api/session`, {
+        return HttpClient(`${process.env.BACKEND_URL}/session`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`

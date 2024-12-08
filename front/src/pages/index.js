@@ -5,12 +5,12 @@ import { useRouter } from "next/router";
 import { authService } from "../services/authService";
 
 export default function Login() {
-  const titulo = "Flor de sal";
+  const titulo = "Marmitech";
   const subtitulo = "Marmitech";
   const router = useRouter();
 
   const [values, setValues] = useState({
-    username: '',
+    email: '',
     password: '',
   });
 
@@ -28,13 +28,13 @@ export default function Login() {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    if (values.username == '' || values.password == '') {
+    if (values.email == '' || values.password == '') {
       alert("Necessário preencher ambos os campos!");
     }
 
     authService
       .login({
-        username: values.username,
+        email: values.email,
         password: values.password,
       })
       .then(() => {
@@ -64,9 +64,9 @@ export default function Login() {
               <input
                 onChange={handleChange}
                 type="text"
-                name="username"
-                values={values.username}
-                placeholder="Usuário"
+                name="email"
+                values={values.email}
+                placeholder="Email"
                 className="p-4 mb-2 rounded-md focus:outline-indigo-600 shadow-md shadow-indigo-500/40"
               />
               <input
@@ -97,11 +97,6 @@ export default function Login() {
                 </button>
               </div>
             </form>
-            <span className="flex place-content-center mt-6 text-indigo-600">Não possui conta?
-              <button className="font-semibold text-indigo-800">
-                Criar conta
-              </button>
-            </span>
           </div>
         </div>
       </main>
