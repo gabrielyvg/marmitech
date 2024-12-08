@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import mockObject from '../utils/mock';
 import { MegaMenu } from 'primereact/megamenu';
 
+//TODO: refazer menu
 export default function HeadlessDemo() {
     const menu = useRef(null);
 
@@ -14,11 +15,12 @@ export default function HeadlessDemo() {
 
     const convertMenuOptions = (options) => {
         return options.map(option => {
+            let items;
+            if (option.subitem) {
+                items = [
+                    {
+                        items: [
 
-            const items = [
-                {
-                    items: [
-                        
                             option.url && {
                                 label: option.subtitle,
                                 icon: 'pi pi-bars',
@@ -39,18 +41,36 @@ export default function HeadlessDemo() {
                                 },
                                 template: null
                             }
-                        
-                    ]
-                }
-            ]     
-            
+
+                        ]
+                    }
+                ]
+            } else {
+                items = [
+                    {
+                        items: [
+                            option.url && {
+                                label: option.subtitle,
+                                icon: 'pi pi-bars',
+                                url: option.url,
+                                command: () => {
+                                    console.log('Redirecionando para:', option.url);
+                                    window.location.href = option.url;
+                                },
+                                template: null
+                            }
+                        ]
+                    }
+                ]
+            }
+
             return {
                 label: option.title,
                 items,
             };
         });
     };
-    
+
 
     const items = convertMenuOptions(mockObject.menuOptions);
 

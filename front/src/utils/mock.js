@@ -35,12 +35,12 @@ const menuOptions = [
     {
         id: "financeiro",
         title: "Financeiro",
-        subtitle: 'Relatórios',
-        url: '/financeiro/relatorios',
+        subtitle: 'Listar lançamentos',
+        url: '/financeiro/lancamentos',
         subitem: {
-            id: "cadastrar-produtos",
-            title: "Adicionar produtos",
-            url: '/produtos/cadastrar-produtos',
+            id: "cadastrar-lancamentos",
+            title: "Adicionar lancamentos",
+            url: '/financeiro/cadastrar-lancamentos',
         }
     },
     {
@@ -64,6 +64,12 @@ const menuOptions = [
             title: "Adicionar Usuário",
             url: '/usuario/cadastrar-usuario',
         }
+    },
+    {
+        id: "relatorios",
+        title: "Relatórios",
+        subtitle: "Relatórios",
+        url: '/relatorios',
     },
 ]
 
