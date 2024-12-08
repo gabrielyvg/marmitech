@@ -108,4 +108,12 @@ export class UsuarioService {
   public verifyEmail(): any {
 
   }
+
+  async getUsuarioByEmail(email): Promise<Usuario> {
+    try {
+      return await this.usuarioRepository.findOne({ where: { email: email } });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
