@@ -14,7 +14,8 @@ export default function Usuario() {
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     'nome': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    'tipoPessoa': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+    'email': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+    'tipoUsuario': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
     'telefone': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
   });
   const toast = useRef(null);
@@ -106,19 +107,20 @@ export default function Usuario() {
           positiveAnswer={positiveAnswer}
           closeModal={closeModal}
         />
-        <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
+        <div className="py-8 lg:py-16 mx-auto max-w-screen-md">
           <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Listagem de Usuários</h2>
           <div className='overflow-x-auto'>
             <DataTable value={usuario} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} removableSort
               filters={filters}
-              globalFilterFields={['nome', 'tipoPessoa', 'telefone']}
+              globalFilterFields={['nome', 'tipoUsuario', 'telefone', 'email']}
               header={header}
               scrollable
               scrollHeight="500px"
               emptyMessage="Usuários não encontrados." onFilter={(e) => setFilters(e.filters)} tableStyle={{ minWidth: '20rem' }}>
               <Column field="nome" header="Nome" sortable></Column>
+              <Column field="email" header="E-mail" sortable></Column>
               <Column field="telefone" header="Telefone" sortable></Column>
-              <Column field="tipoPessoa" header="Tipo Pessoa" sortable></Column>
+              <Column field="tipoUsuario" header="Tipo Pessoa" sortable></Column>
               <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '10rem' }}></Column>
             </DataTable>
           </div>

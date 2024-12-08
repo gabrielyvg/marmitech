@@ -218,4 +218,17 @@ const tipoUsuario = [
     }
 ]
 
-export default { menuOptions, marmitasTamanho, tableCliente, tableGastos, empresas, tiposProdutos, tableProdutos, tablePedidos, tipoInstituicao, tipoUsuario };
+const permissao = [
+    {
+        id: 1,
+        tipoUsuario: 1,
+        nome: 'Acesso Administrador'
+    },
+    {
+        id: 2,
+        tipoUsuario: 2,
+        nome: 'Acesso Financeiro'
+    }
+]
+
+export default { menuOptions, marmitasTamanho, tableCliente, tableGastos, empresas, tiposProdutos, tableProdutos, tablePedidos, tipoInstituicao, tipoUsuario, permissao };
