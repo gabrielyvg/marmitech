@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { Usuario } from './usuario.entity';
 import { UsuarioSalvarDto } from './dto/usuario.salvar.dto';
 import { ResultadoDto } from 'src/dto/resultado.dto';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsuarioService {
   constructor(
@@ -25,7 +25,7 @@ export class UsuarioService {
 
   async salvarUsuario(data: UsuarioSalvarDto): Promise<ResultadoDto> {
     let usuario: Usuario;
-    console.log(data);
+
     if (data && data.id) {
       usuario = await this.usuarioRepository.findOne({ where: { id: data.id } });
       if (!usuario) {
@@ -46,6 +46,11 @@ export class UsuarioService {
     }
 
     usuario.nome = data.nome;
+    usuario.telefone = data.telefone;
+    usuario.tipoPessoa = data.tipoPessoa;
+    usuario.idInstituicao = data.idInstituicao ? data.idInstituicao : 0;
+    usuario.email = data.email;
+    usuario.token = await this.encryptPassword(data.senha);
 
     try {
       await this.usuarioRepository.save(usuario);
@@ -80,5 +85,15 @@ export class UsuarioService {
           mensagem: `Houve um erro ao remover o usuario. ${error}`
         }
       });
+  }
+
+  async encryptPassword(senha): Promise<string> {
+    const saltOrRounds = 10;
+    const hashedSenha = await bcrypt.hash(senha, saltOrRounds);
+    return hashedSenha;
+  }
+
+  public verifyEmail(): any {
+
   }
 }

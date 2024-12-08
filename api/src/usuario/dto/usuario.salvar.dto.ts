@@ -5,5 +5,7 @@ export interface UsuarioSalvarDto {
     tipoPessoa: number;
     idInstituicao: number;
     token: string;
+    email: string;
+    senha: string;
     removido?: number;
 }

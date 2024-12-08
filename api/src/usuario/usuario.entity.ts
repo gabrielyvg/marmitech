@@ -20,6 +20,9 @@ export class Usuario {
   @Column()
   token: string;
 
+  @Column()
+  email: string;
+
   @Column({ default: 0 })
   removido: number;
 }
