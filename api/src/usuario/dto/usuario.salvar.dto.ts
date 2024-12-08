@@ -3,6 +3,7 @@ export interface UsuarioSalvarDto {
     nome: string;
     telefone: string;
     tipoPessoa: number;
+    tipoUsuario: string;
     idInstituicao: number;
     token: string;
     email: string;

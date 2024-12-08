@@ -3,13 +3,14 @@ import { UsuarioService } from "./usuario.service";
 import { Usuario } from "./usuario.entity";
 import { UsuarioSalvarDto } from "./dto/usuario.salvar.dto";
 import { ResultadoDto } from "src/dto/resultado.dto";
+import { UsuarioListDTO } from "./dto/usuario.list.dto";
 
 @Controller('usuario')
 export class usuarioController {
     constructor(private readonly usuarioService: UsuarioService) { }
 
     @Get('listar')
-    async getUsuario(): Promise<Usuario[]> {
+    async getUsuario(): Promise<UsuarioListDTO[]> {
         return this.usuarioService.getUsuario();
     }
 

@@ -4,6 +4,7 @@ import { Usuario } from './usuario.entity';
 import { UsuarioSalvarDto } from './dto/usuario.salvar.dto';
 import { ResultadoDto } from 'src/dto/resultado.dto';
 import * as bcrypt from 'bcrypt';
+import { UsuarioListDTO } from './dto/usuario.list.dto';
 @Injectable()
 export class UsuarioService {
   constructor(
@@ -11,12 +12,23 @@ export class UsuarioService {
     private usuarioRepository: Repository<Usuario>,
   ) { }
 
-  async getUsuario(): Promise<Usuario[]> {
-    return this.usuarioRepository.find({
+  async getUsuario(): Promise<UsuarioListDTO[]> {
+    let usuarios = await this.usuarioRepository.find({
       where: [
         { removido: 0 }
       ]
     });
+
+    // TODO: deixar dinamico
+    return usuarios.map(usuario => ({
+      id: usuario.id,
+      nome: usuario.nome,
+      telefone: usuario.telefone,
+      email: usuario.email,
+      tipoPessoa: usuario.tipoPessoa,
+      idInstituicao: usuario.idInstituicao,
+      tipoUsuario: usuario.tipoPessoa === 1 ? 'Administrador' : 'Financeiro',
+    }));
   }
 
   async getUsuarioById(id: number): Promise<Usuario | null> {
