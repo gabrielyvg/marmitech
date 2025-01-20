@@ -119,9 +119,9 @@ export default function CadastrarPedidos() {
         try {
             const result = await pedidoService.salvar(data);
             if (result.status) {
-                console.log('SALVOU');
+                alert('salvo')
             } else {
-                console.log('ERRO');
+                alert('erro')
             }
             voltar();
         } catch (err) {
