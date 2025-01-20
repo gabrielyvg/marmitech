@@ -1,6 +1,13 @@
-import { Cliente } from 'src/cliente/cliente.entity';
-import { Produtos } from 'src/produtos/produtos.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Cliente } from "src/cliente/cliente.entity";
+import { Produtos } from "src/produtos/produtos.entity";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+} from "typeorm";
 
 @Entity()
 export class Pedido {
@@ -31,11 +38,14 @@ export class Pedido {
   @Column()
   idInstituicao: number;
 
-  @ManyToOne(() => Cliente, cliente => cliente.pedido)
-  @JoinColumn({ name: 'idCliente' })
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @ManyToOne(() => Cliente, (cliente) => cliente.pedido)
+  @JoinColumn({ name: "idCliente" })
   public cliente: Cliente;
 
-  @ManyToOne(() => Produtos, produto => produto.pedido)
-  @JoinColumn({ name: 'idProduto' })
+  @ManyToOne(() => Produtos, (produto) => produto.pedido)
+  @JoinColumn({ name: "idProduto" })
   public produto: Produtos;
 }

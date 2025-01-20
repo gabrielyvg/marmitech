@@ -1,5 +1,11 @@
-import { Pedido } from 'src/pedido/pedido.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Pedido } from "src/pedido/pedido.entity";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  CreateDateColumn,
+} from "typeorm";
 
 @Entity()
 export class Cliente {
@@ -12,7 +18,7 @@ export class Cliente {
   @Column()
   telefone: string;
 
-  @Column('text')
+  @Column("text")
   endereco: string;
 
   @Column()
@@ -20,26 +26,27 @@ export class Cliente {
 
   @Column({ length: 500 })
   bairro: string;
-  
+
   @Column({ length: 500 })
   cidade: string;
 
   @Column({ default: 0 })
   paga_mensalmente: number;
-  
-  @Column({ default: '0' })
+
+  @Column({ default: "0" })
   nfe: string;
 
   @Column({ default: 0 })
   removido: number;
-    
+
   @Column({ default: 0 })
   paga_semanalmente: number;
 
   @Column()
   idInstituicao: number;
-  // @CreateDateColumn()
-  // created_at: Date;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   // @UpdateDateColumn()
   // updated_at: Date;
@@ -50,6 +57,6 @@ export class Cliente {
   // @Column()
   // updated_by: number;
 
-  @OneToMany(() => Pedido, pedido => pedido.cliente)
+  @OneToMany(() => Pedido, (pedido) => pedido.cliente)
   public pedido: Pedido[];
 }

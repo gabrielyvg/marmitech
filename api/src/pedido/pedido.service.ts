@@ -5,18 +5,19 @@ import { ResultadoDto } from "src/dto/resultado.dto";
 @Injectable()
 export class PedidoService {
   constructor(
-    @Inject('PEDIDO_REPOSITORY')
+    @Inject("PEDIDO_REPOSITORY")
     private pedidoRepository: Repository<Pedido>
-  ) { }
+  ) {}
 
   async getPedido(): Promise<Pedido[]> {
-    const pedidos = await this.pedidoRepository.createQueryBuilder('pedido')
-      .leftJoinAndSelect('pedido.cliente', 'cliente')
-      .leftJoinAndSelect('pedido.produto', 'produto')
-      .where('pedido.removido = :removido', { removido: 0 })
-      .orderBy('pedido.data', 'DESC')
+    const pedidos = await this.pedidoRepository
+      .createQueryBuilder("pedido")
+      .leftJoinAndSelect("pedido.cliente", "cliente")
+      .leftJoinAndSelect("pedido.produto", "produto")
+      .where("pedido.removido = :removido", { removido: 0 })
+      .orderBy("pedido.createdAt", "DESC")
       .getMany();
-    console.log('pedidos', pedidos)
+
     return pedidos;
   }
 
@@ -28,39 +29,62 @@ export class PedidoService {
     let pedido: Pedido;
     try {
       if (data && data.id) {
-        pedido = await this.pedidoRepository.findOne({ where: { id: data.id } });
+        pedido = await this.pedidoRepository.findOne({
+          where: { id: data.id },
+        });
         if (!pedido) {
           return {
             status: false,
-            mensagem: 'Pedido não encontrado',
+            mensagem: "Pedido não encontrado",
           };
         }
       }
-      let pedidoAtual = pedido || new Pedido();
-      const pedidosParaSalvar = [];
-      if (data.idsProdutos && Array.isArray(data.idsProdutos) && data.idsProdutos.length > 0) {
-        for (const produto of data.idsProdutos) {
-          pedidoAtual.idCliente = data.idCliente;
-          pedidoAtual.idProduto = produto.idProduto;
-          pedidoAtual.quantidade = produto.quantidade;
-          pedidoAtual.data = data.date;
-          pedidoAtual.nomeCliente = data.nomeCliente;
-          pedidoAtual.pago = data.pago ?? 0;
-          pedidoAtual.removido = data.removido ?? 0;
+      let pedidosParaSalvar = [];
 
-          pedidosParaSalvar.push(pedidoAtual);
+      if (
+        data.idsProdutos &&
+        Array.isArray(data.idsProdutos) &&
+        data.idsProdutos.length > 0
+      ) {
+        for (const produto of data.idsProdutos) {
+          const pedidoTemp = {
+            idCliente: data.idCliente,
+            idProduto: produto.idProduto,
+            quantidade: produto.quantidade,
+            data: data.date,
+            nomeCliente: data.nomeCliente,
+            pago: data.pago ?? 0,
+            removido: data.removido ?? 0,
+            idInstituicao: 0,
+          };
+
+          const duplicado = pedidosParaSalvar.some(
+            (p) =>
+              p.idCliente === pedidoTemp.idCliente &&
+              p.idProduto === pedidoTemp.idProduto &&
+              p.quantidade === pedidoTemp.quantidade &&
+              p.data === pedidoTemp.data &&
+              p.nomeCliente === pedidoTemp.nomeCliente &&
+              p.pago === pedidoTemp.pago &&
+              p.removido === pedidoTemp.removido
+          );
+
+          if (!duplicado) {
+            pedidosParaSalvar.push(pedidoTemp);
+          }
         }
       } else {
-        pedidoAtual = data;
+        pedidosParaSalvar = [data];
       }
 
       await this.pedidoRepository.save(pedidosParaSalvar);
+
       return {
         status: true,
-        mensagem: 'Todos os pedidos foram cadastrados com sucesso',
+        mensagem: "Todos os pedidos foram cadastrados com sucesso",
       };
     } catch (error) {
-      console.error('Error saving pedido:', error);
+      console.error("Error saving pedido:", error);
       return {
         status: false,
         mensagem: `Houve um erro ao cadastrar o pedido. ${error.message}`,
@@ -69,23 +93,25 @@ export class PedidoService {
   }
 
   async removePedido(id: number): Promise<ResultadoDto> {
-    const pedido = await this.getPedidoById(id)
+    const pedido = await this.getPedidoById(id);
 
     if (pedido.removido === 0) {
       pedido.removido = 1;
     }
 
-    return this.pedidoRepository.save(pedido)
+    return this.pedidoRepository
+      .save(pedido)
       .then(() => {
         return <ResultadoDto>{
           status: true,
-          mensagem: 'Pedido removido com sucesso'
-        }
-      }).catch((error) => {
+          mensagem: "Pedido removido com sucesso",
+        };
+      })
+      .catch((error) => {
         return <ResultadoDto>{
           status: false,
-          mensagem: `Houve um erro ao remover o pedido. ${error}`
-        }
+          mensagem: `Houve um erro ao remover o pedido. ${error}`,
+        };
       });
   }
 }
